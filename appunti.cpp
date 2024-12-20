@@ -325,3 +325,89 @@ class My_error : runtime_error
 
         const char* what() const override {return "My_error";}
 };
+
+// UNIQUE_PTR SMART POINTER
+template<typename T>
+class unique_ptr
+{
+    T* _ptr = nullptr;
+
+    public:
+        unique_ptr() = default;
+        unique_ptr(T* ptr);
+
+        ~unique_ptr();
+
+        T operator*();
+        T* operator->();
+
+        T* release();
+
+        unique_ptr(const unique_ptr<T>& ptr) = delete;
+        unique_ptr& operator=(const unique_ptr<T>& ptr) = delete;
+}
+
+template<typename T>
+unique_ptr<T>::unique_ptr (T* ptr)
+{
+    _ptr = ptr;
+}
+
+template<typename T>
+T unique_ptr<T>::operator* ()
+{
+    return *_ptr;
+}
+
+template<typename T>
+unique_ptr<T>::~unique_ptr ()
+{
+    delete _ptr;
+    _ptr = nullptr;
+}
+
+template<typename T>
+T* unique_ptr<T>::release ()
+{
+    T* ptr = _ptr
+    _ptr = nullptr;
+    return ptr;
+}
+
+template<typename T>
+
+T* unique_ptr<T>::operator-> ()
+{
+    return _ptr;
+}
+
+std::vector<int>* make_vec ()
+{
+    std::unique_ptr<std::vector<int>> p { new std::vector<int> };
+    return p.release();
+}
+
+// unique_ptr SOLO SPOSTATO, NON COPIATO
+std::unique_ptr<int> AllocateAndReturn ()
+{
+    std::unique_ptr<int> ptr_to_return (new int (42));
+    return ptr_to_return;
+}
+
+// con shared_ptr è possibile la copia
+std::shared_ptr<int> AllocateAndReturn ()
+{
+    std::shared_ptr<int> ptr_to_return (new int (42));
+    return ptr_to_return;
+}
+
+int main ()
+{
+    std::shared_ptr<int> moved_ptr = AllocateAndReturn ();
+
+    std::shared_ptr<int> copied_ptr = moved_ptr;
+
+    std::cout << *moved_ptr << std::endl;
+
+    return 0;
+}
