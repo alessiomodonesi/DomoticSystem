@@ -335,7 +335,6 @@ public:
     My_error(int x) : error_value{x} {}
     int error_value;
 
-<<<<<<< HEAD
         const char* what() const override {return "My_error";}
 };
 
@@ -424,7 +423,3 @@ int main ()
 
     return 0;
 }
-=======
-    const char *what() const override { return "My_error"; }
-};
->>>>>>> f4d5577241d2af9284b70bb70529a6551e6d17c3
