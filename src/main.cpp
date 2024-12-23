@@ -1,12 +1,7 @@
 #include <iostream>
-#include <iomanip>
-#include <random>
-#include <vector>
-#include <cmath>
 
-#include "class.h"
-
-int main(int argc, char *argv[])
+int main()
 {
+    // Main function intentionally left empty
     return 0;
 }
