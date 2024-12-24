@@ -1,6 +1,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "DomoticSystem.h"
 #include "DomoticDevice.h"
@@ -49,7 +50,7 @@ void DomoticSystem::handleOverConsumption ()
     }
 }
 
-void DomoticSystem::addDevidce(const std::shared_ptr<DomoticDevice>& device)
+void DomoticSystem::addDevice(const std::shared_ptr<DomoticDevice>& device)
 {
     devices.push_back(device);
 }

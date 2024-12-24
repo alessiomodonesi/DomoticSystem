@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "DomoticDevice.h"
 
@@ -28,7 +29,7 @@ public:
     DomoticSystem(double maxPowerConsumption);
 
     // Aggiunge un dispositivo alla lista gestita.
-    void addDevice(const std::shared_ptr<DomoticDevice> &device);
+    void addDevice(const std::shared_ptr<DomoticDevice>& device);
 
     // Rimuove un dispositivo dalla lista tramite il suo ID.
     // Domanda: Come gestire errori se l'ID fornito non esiste?
