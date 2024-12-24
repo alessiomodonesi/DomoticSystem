@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -shared -Wl,-soname,libDomotica.so -o libDomotica.so CMakeFiles/Domotica.dir/src/DomoticSystem.cpp.o CMakeFiles/Domotica.dir/src/DomoticDevice.cpp.o CMakeFiles/Domotica.dir/src/FixedCycleDevice.cpp.o CMakeFiles/Domotica.dir/src/ManualDevice.cpp.o 
