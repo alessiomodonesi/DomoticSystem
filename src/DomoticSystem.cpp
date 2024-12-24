@@ -7,7 +7,48 @@
 DomoticSystem::DomoticSystem(double maxPowerConsumption)
     : maxPowerConsumption{maxPowerConsumption}, photovoltaicProduction{0} {}
 
-void DomoticSystem::addDevidce(const std::shared_ptr<DomoticDevice> &device)
+double DomoticSystem::calculateCurrentConsumption () const
+{
+    double totalConsumption = 0;
+    for (const auto& device : devices)
+    {
+        if(devide.isOn())
+        {
+            totalConsumption += device.getPowerConsumption();
+        }
+    }
+    return totalConsumption;
+}
+
+// function object per il predicato del find_if nel metodo successivo
+class overConsumption
+{
+    public:
+        bool operator() (const std::shared_ptr<DomoticDevice>& device) const
+        {
+            return device.isOn();
+        }
+}
+
+void DomoticSystem::handleOverConsumption ()
+{
+    while (calcultedCurrentConsumption() > (maxPowerConsumption + photovoltaicProduction))
+    {
+        auto it = std::find_if(devices.rbegin(), devices.rend(), overConsumption());
+        // la r prima di begin e end serve per cercare in senso inverso perché quando si spegne un dispositivo si parte dall'ultimo acceso
+
+        if (it != devices.rend())
+        {
+            *it.turnOff();
+        }
+        else
+        {
+            throw std::runtime_error ("All devices are off");
+        }
+    }
+}
+
+void DomoticSystem::addDevidce(const std::shared_ptr<DomoticDevice>& device)
 {
     devices.push_back(device);
 }
@@ -38,45 +79,6 @@ void DomoticSystem::removeDevice (int id)
     }
 }
 
-double DomoticSystem::calculateCurrentConsumption () const
-{
-    double totalConsumption = 0;
-    for (const auto& device : devices)
-    {
-        if(devide.isOn())
-        {
-            totalConsumption += device.getPowerConsumption();
-        }
-    }
-    return totalConsumption;
-}
-
-class overConsumption
-{
-    public:
-        bool operator() (const std::shared_ptr<DomoticDevice>& device) const
-        {
-            return device.isOn();
-        }
-}
-
-void DomoticSystem::handleOverConsumption () // DA FINIRE
-{
-    while (calcultedCurrentConsumption() > (maxPowerConsumption + photovoltaicProduction))
-    {
-        auto it = std::find_if(devices.rbegin(), devices.rend(), overConsumption());
-
-        if (it != devices.rend())
-        {
-            *it.turnOff();
-        }
-        else
-        {
-            throw std::runtime_error ("All devices are off");
-        }
-    }
-}
-
 void DomoticSystem::setPhotovoltaicProduction (double production)
 {
     photoVoltaicProduction = production;
@@ -91,7 +93,7 @@ void DomoticSystem::displaySystemStatus () const
 {
     for (const auto& device : devices)
     {
-        std::cout << devide.getStatus() << std::endl;
+        std::cout << device.getStatus() << std::endl;
     }
     std::cout << "Current total consumption: " << calculateCurrentConsumption() << " kW" << std::endl;
 }
