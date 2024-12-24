@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+
 #include "DomoticDevice.h"
 
 // Classe per gestire l'intero sistema domotico.
