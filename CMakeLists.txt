@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.84 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 11)
-project(Domotica VERSION 1.0)
+project(Domotica)
 include_directories(include)
-set(SOURCES
-    src/main.cpp
-    src/DomoticDevice.cpp
-    src/ManualDevice.cpp
+add_library(
+    ${PROJECT_NAME} SHARED
+    src/DomoticaDevice.cpp
     src/FixedCycleDevice.cpp
+    src/ManualDevice.cpp
 )
-add_executable(domotica ${SOURCES})
+add_executable(main src/main.cpp)
 target_link_libraries(main ${PROJECT_NAME})
