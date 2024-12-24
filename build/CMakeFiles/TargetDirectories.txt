@@ -1,0 +1,4 @@
+/config/workspace/DomoticSystem/build/CMakeFiles/Domotica.dir
+/config/workspace/DomoticSystem/build/CMakeFiles/main.dir
+/config/workspace/DomoticSystem/build/CMakeFiles/edit_cache.dir
+/config/workspace/DomoticSystem/build/CMakeFiles/rebuild_cache.dir
