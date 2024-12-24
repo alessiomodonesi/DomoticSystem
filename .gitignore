@@ -1,2 +1,5 @@
 # Ignora la cartella build
 build/
+
+# Mac stupid file
+.DS_Store
