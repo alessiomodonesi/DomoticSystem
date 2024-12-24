@@ -10,20 +10,20 @@ Cosa ha sviluppato **Silvestrin Tommaso**:
 Cosa ha sviluppato **Popusoi David**:
 
 ## Come compilare con Cmake
-> ~/Final-Project/$ cd build
+> ~/DomoticSystem/$ cd build
 >
-> ~/Final-Project/build/$ make
+> ~/DomoticSystem/build/$ make
 > 
-> ~/Final-Project/build/$ ./main
+> ~/DomoticSystem/build/$ ./main
 
 ## Come compilare con g++
-> ~/Final-Project/$ cd include
+> ~/DomoticSystem/$ cd include
 > 
-> ~/Final-Project/include/$ mv class.h ../src/class.h
+> ~/DomoticSystem/include/$ mv class.h ../src/class.h
 > 
-> ~/Final-Project/include/$ g++ class.cpp main.cpp -o main
+> ~/DomoticSystem/include/$ g++ class.cpp main.cpp -o main
 > 
-> ~/Final-Project/include/$ ./main
+> ~/DomoticSystem/include/$ ./main
 
 ## Links utili
 - [class.h](./include/class.h)
