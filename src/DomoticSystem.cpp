@@ -1,7 +1,8 @@
-#include "../include/DomoticSystem.h"
 #include <vector>
 #include <memory>
 #include <string>
+
+#include "DomoticSystem.h"
 #include "DomoticDevice.h"
 
 DomoticSystem::DomoticSystem(double maxPowerConsumption)
@@ -12,7 +13,7 @@ double DomoticSystem::calculateCurrentConsumption () const
     double totalConsumption = 0;
     for (const auto& device : devices)
     {
-        if(devide.isOn())
+        if(device.isOn())
         {
             totalConsumption += device.getPowerConsumption();
         }
