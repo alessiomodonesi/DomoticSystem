@@ -25,8 +25,16 @@ Cosa ha sviluppato **Popusoi David**:
 > 
 > ~/DomoticSystem/include/$ ./main
 
-## Links utili
-- [class.h](./include/class.h)
-- [class.cpp](./src/class.cpp)
+## Class Headers
+- [DomoticSystem.h](./include/DomoticSystem.h)
+- [DomoticDevice.h](./include/DomoticDevice.h)
+- [FixedCycleDevice.h](./include/FixedCycleDevice.h)
+- [ManualDevice.h](./include/ManualDevice.h)
+
+## Class Implementation
+- [DomoticSystem.cpp](./include/DomoticSystem.cpp)
+- [DomoticDevice.cpp](./include/DomoticDevice.cpp)
+- [FixedCycleDevice.cpp](./include/FixedCycleDevice.cpp)
+- [ManualDevice.cpp](./include/ManualDevice.cpp)
 - [main.cpp](./src/main.cpp)
 
