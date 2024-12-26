@@ -42,13 +42,13 @@ public:
 
     // Esegue un comando dato come input.
     // Chiarimento: Il metodo supporta una sintassi specifica per i comandi testuali.
-    void executeCommand(const std::string &command);
+    void executeCommand(const std::string& command);
 
     // Mostra lo stato attuale del sistema.
     void displaySystemStatus() const;
 
     // Registra un evento in un log.
-    void logEvent(const std::string &event) const;
+    void logEvent(const std::string& event) const;
 };
 
 #endif // DOMOTICSYSTEM_H

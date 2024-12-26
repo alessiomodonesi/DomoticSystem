@@ -42,7 +42,7 @@ void DomoticSystem::handleOverConsumption ()
     while (calcultedCurrentConsumption() > (maxPowerConsumption + photovoltaicProduction))
     {
         auto it = std::find_if(devices.rbegin(), devices.rend(), overConsumption());
-        // rbegin e rend (reverse) serve per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
+        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
 
         if (it != devices.rend())
         {
@@ -95,7 +95,7 @@ void DomoticSystem::setPhotovoltaicProduction (double production)
 }
 
 // Esegue un comando dato come input.
-void DomoticSystem::executeCommand (const std::string &command)
+void DomoticSystem::executeCommand (const std::string& command)
 {
 
 }
@@ -111,7 +111,9 @@ void DomoticSystem::displaySystemStatus () const
 }
 
 // Registra un evento in un log.
-void DomoticSystem::logEvent(const std::string &event) const
+void DomoticSystem::logEvent(const std::string& event) const
 {
+    static const std::string logFileName = "domoticSystem.txt";
 
+    std::ofstream logFile(logFileName, std::ios_base::app);
 }
