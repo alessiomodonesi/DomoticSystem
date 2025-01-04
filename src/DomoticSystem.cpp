@@ -108,6 +108,7 @@ void DomoticSystem::displaySystemStatus () const
         std::cout << device.getStatus() << std::endl;
     }
     std::cout << "Current total consumption: " << calculateCurrentConsumption() << " kW" << std::endl;
+    std::cout << "Photovoltaic production: " << photovoltaicProduction << " kW" << std::endl;
 }
 
 // Registra un evento in un log.
@@ -116,4 +117,12 @@ void DomoticSystem::logEvent(const std::string& event) const
     static const std::string logFileName = "domoticSystem.txt";
 
     std::ofstream logFile(logFileName, std::ios_base::app);
+    if (logFile.is_open())
+    {
+        logFile << event << std::endl;
+    }
+    else
+    {
+        throw std::runtime_error("Cannot open log file");
+    }
 }
