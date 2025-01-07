@@ -5,46 +5,51 @@
 
 #include <string>
 
+#include "Time.h"
+
 // Classe base per rappresentare un dispositivo domotico generico.
 // Questa classe offre funzionalità comuni come accensione/spegnimento,
 // gestione timer, e calcolo del consumo energetico.
 class DomoticDevice
 {
 protected:
-    std::string name_{"device_"};   // Nome del dispositivo
-    int id_;                        // ID univoco del dispositivo
-    double powerConsumption_{0};    // Potenza consumata (positiva) o prodotta (negativa)
+    const int id_;                  // ID univoco del dispositivo
+    const std::string name_;        // Nome del dispositivo
+    const double powerConsumption_; // Potenza consumata (positiva) o prodotta (negativa)
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
+    Time startTime_{NULL};          // Orario di accensione automatica 
+    Time offTime_{NULL};            // Orario di spegnimento automatico (opzionale)
 
 public:
-    // Costruttore: inizializza il dispositivo con un nome, un ID e un valore di consumo energetico.
+    // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
     DomoticDevice(const std::string &name, double powerConsumption);
 
-    // Distruttore virtuale per supportare l'ereditarietà.
-    virtual ~DomoticDevice();
-
     // Metodo per accendere il dispositivo. Gestisce anche lo stato interno.
-    virtual void turnOn();
+    void turnOn(void);
 
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
-    virtual void turnOff();
+    void turnOff(void);
 
-    // Imposta un timer per l'accensione e lo spegnimento del dispositivo.
-    // È necessario validare il formato degli orari passati come argomenti
-    virtual void setTimer(const std::string &startTime, const std::string &endTime);
+    // Imposta l’orario di accensione e spegnimento per il dispositivo.
+    void setTimer(const Time &startTime, const Time &offTime);
 
     // Calcola il consumo energetico in base alle ore di funzionamento.
     // Chiarimento: Il consumo viene calcolato considerando un assorbimento costante.
-    virtual double calculateEnergyConsumption(double hours) const;
+    double calculateEnergyConsumption(const Time &startTime, const Time &offTime);
 
-    // Ritorna lo stato del dispositivo in formato leggibile.
-    virtual std::string getStatus() const;
+    // Distruttore virtuale per supportare l'ereditarietà.
+    ~DomoticDevice(void);
 
-    // Getter per nome, ID, potenza e stato.
-    const std::string &getName(void) const { return name_; }
+    // Getter per ID, nome, potenza, stato ed orario.
     int getId(void) const { return id_; }
+    std::string &getName(void) const { return name_; }
     double getPowerConsumption(void) const { return powerConsumption_; }
     bool isDeviceOn(void) const { return isOn_; }
+    Time getStartTime(void) const { return startTime_;}
+    Time getOffTime(void) const { return offTime_;}
 };
+
+// Ritorna lo stato del dispositivo in formato leggibile.
+std::ostream &operator<<(std::ostringstream &os, const DomoticDevice &obj);
 
 #endif // DOMOTICDEVICE_H

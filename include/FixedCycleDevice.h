@@ -1,3 +1,5 @@
+// @author David Popusoi
+
 #ifndef CYCLEDEVICE_H
 #define CYCLEDEVICE_H
 
@@ -7,23 +9,21 @@
 class CycleDevice : public DomoticDevice
 {
 private:
-    double cycleDuration;  // Durata del ciclo in ore
-    std::string startTime; // Orario di inizio del ciclo
+    const int cycleDuration_;  // Durata del ciclo in minuti
 
 public:
-    // Costruttore: inizializza il dispositivo con nome, ID, consumo e durata ciclo.
-    CycleDevice(const std::string &name, int id, double powerConsumption, double cycleDuration);
+    // Costruttore: inizializza il dispositivo con nome, consumo e durata ciclo.
+    CycleDevice(const std::string &name, double powerConsumption, double cycleDuration);
 
-    // Imposta un timer per il ciclo di funzionamento.
-    void setTimer(const std::string &startTime, const std::string &endTime = "") override;
+    // Overloading del metodo per i dispositivi di tipo FixedCycle
+    void setTimer(const Time &startTime, const int cycleDuration);
 
     // Interrompe manualmente un ciclo in corso.
-    // Chiarimento: Questo metodo è utile per sovraccarico o interventi manuali.
-    void stopCycle();
+    // Questo metodo è utile per sovraccarico o interventi manuali.
+    void stopCycle(void);
 
-    // Getter per la durata e l'orario di inizio del ciclo.
-    double getCycleDuration() const;
-    std::string getStartTime() const;
+    // Getter per la durata del ciclo.
+    double getCycleDuration(void) const { return cycleDuration_; }
 };
 
 #endif // CYCLEDEVICE_H
