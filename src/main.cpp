@@ -1,14 +1,14 @@
 #include <iostream>
-#include <chrono>
+
+#include "DomoticSystem.h"
 
 int main()
 {
-    // Main function intentionally left empty
-    return 0;
-}
+    // Creazione di dispositivi e aggiunta al sistema.
+    DomoticSystem.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Impianto fotovoltaico", +1.5)));
+    DomoticSystem.addDevice(std::unique_ptr<DomoticDevice>(new FixedDevice("Lavatrice", -2.0, 110)));
 
-std::vector<int>* make_vec()
-{
-    std::unique_ptr<std::vector<int>> p { new std::vector<int> };
-    // return p.release();
+    // Rimuovere un dispositivo.
+    DomoticSystem.removeDevice(std::hash<std::string>{}("Lavatrice"));
+    return 0;
 }
