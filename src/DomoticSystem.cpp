@@ -6,8 +6,6 @@
 #include <iostream>
 
 #include "DomoticSystem.h"
-#include "DomoticDevice.h"
-#include "Time.h"
 
 // Costruttore: inizializza il sistema con un limite massimo di potenza.
 DomoticSystem::DomoticSystem(double powerConsumption)
@@ -20,7 +18,7 @@ DomoticSystem::DomoticSystem(double powerConsumption)
 class overConsumption
 {
     public:
-        bool operator()(const std::unique_ptr<std::vector<DomoticDevice>> &devices__) const
+        bool operator()(const  std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
         {
             return device.isOn();
         }
@@ -54,17 +52,17 @@ double DomoticSystem::calculateCurrentConsumption(void) const
 }
 
 // Aggiunge un dispositivo alla lista gestita.
-void DomoticSystem::addDevice(const DomoticDevice &device)
+void DomoticSystem::addDevice(std::unique_ptr<DomoticDevice> device)
 {
-    devices_.push_back(device);
+    devices_.push_back(std::move(device));
 }
 
 // function object predicato per il find_if nel metodo successivo
 class idIsPresent
 {
-    int ID;
+    std::size_t ID;
     public:
-        idIsPresent(int id) : ID{id} {}
+        idIsPresent(std::size_t id) : ID{id} {}
 
         bool operator()(const DomoticDevice &device) const
         {
@@ -73,7 +71,7 @@ class idIsPresent
 }
 
 // Rimuove un dispositivo dalla lista tramite il suo ID.
-void DomoticSystem::removeDevice (int id)
+void DomoticSystem::removeDevice(std::size_t id)
 {
     auto it = std::find_if(devices_.begin(), devices_.end(), idIsPresent(id));
     if (it != devices_.end())
@@ -83,7 +81,7 @@ void DomoticSystem::removeDevice (int id)
 }
 
 // Esegue un comando dato come input.
-void DomoticSystem::executeCommand (const std::string &command) {}
+void DomoticSystem::executeCommand(const std::string &command) {}
 
 // Mostra lo stato attuale del sistema.
 void DomoticSystem::displaySystemStatus(void) const
@@ -112,7 +110,19 @@ void DomoticSystem::logEvent(const std::string &event) const
 void resetTime(void) {}
 
 // Rimuove i timer di tutti i dispositivi.
-void stopAllCycle(void) {}
+void resetTimers(void) {
+    for (const auto &device : devices) {
+        // Rimuove i timer dei device FixedCycle.
+        if (auto fixedDevice = dynamic_cast<FixedCycleDevice*>(device.get()))
+            fixedDevice->stopCycle();
+        
+        // Setta offTime_ a NULL per i device non FixedCycle.
+        else {
+            if (device.getOffTime() != NULL)
+                device->setOffTime(NULL);
+        }      
+    }
+}
 
 // Riporta il sistema alle condizioni iniziali.
 void resetAll(void) {}
