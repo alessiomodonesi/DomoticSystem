@@ -57,7 +57,11 @@ bool operator==(const Time &a, const Time &b) {
     return (a.getHours() == b.getHours()) && (a.getMinutes() == b.getMinutes());
 } 
 
-std::ostream &operator<<(std::ostringstream &os, const Time &obj) {
+bool operator!=(const Time &a, const Time &b) {
+        return (a.getHours() != b.getHours()) || (a.getMinutes() != b.getMinutes());
+}
+
+std::ostream &operator<<(std::ostream &os, const Time &obj) {
     std::string offsetH = "", offsetM = "";
     if (obj.getHours() < 10)
         offsetH = "0";
@@ -65,5 +69,5 @@ std::ostream &operator<<(std::ostringstream &os, const Time &obj) {
         offsetM = "0";
     
     os << offsetH << obj.getHours() << ":" << offsetM << obj.getMinutes() << std::endl;
-    return os.str();
+    return os;
 }

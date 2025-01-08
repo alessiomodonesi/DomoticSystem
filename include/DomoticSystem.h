@@ -19,9 +19,7 @@ private:
     std::vector<std::unique_ptr<DomoticDevice>> devices_;    // Lista di dispositivi gestiti dal sistema
     double maxPowerConsumption_;                             // Potenza massima consentita (kW)
     static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5; // Potenza massima consentita di default
-
-    // AGGIUNTA
-    double totalSystemEnergyConsumption_; // Consumo energetico totale del sistema dalle 00:00
+    double totalSystemEnergyConsumption_;                    // Consumo energetico totale del sistema dalle 00:00
 
     // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
     double calculateCurrentConsumption(void) const;
@@ -33,9 +31,6 @@ public:
     // Costruttore: inizializza il sistema con un limite massimo di potenza.
     DomoticSystem(double powerConsumption = DEFAULT_POWER_CONSUMPTION);
 
-    // AGGIUNTA
-    double getTotalSystemEnergyConsumption(void) const { return totalSystemEnergyConsumption_; }
-
     // Aggiunge un dispositivo alla lista gestita.
     void addDevice(std::unique_ptr<DomoticDevice> device);
 
@@ -44,9 +39,6 @@ public:
 
     // Esegue un comando dato come input.
     void executeCommand(const std::string &command);
-
-    // Mostra lo stato attuale del sistema.
-    void displaySystemStatus(void) const;
 
     // Registra un evento in un log.
     void logEvent(const std::string &event) const;
@@ -61,9 +53,12 @@ public:
 
     // Riporta il sistema alle condizioni iniziali.
     void resetAll(void);
-};
 
-// Mostra la lista di tutti i dispositivi.
-std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj);
+    // Getter per totalSystemEnergyConsumption_
+    double getTotalSystemEnergyConsumption(void) const { return totalSystemEnergyConsumption_; }
+
+    // Mostra la lista di tutti i dispositivi.
+    friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> devices_);
+};
 
 #endif // DOMOTICSYSTEM_H

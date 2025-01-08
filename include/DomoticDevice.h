@@ -17,8 +17,8 @@ protected:
     const double powerConsumption_; // Potenza consumata (negativa) o prodotta (positiva)
     double totalEnergyConsumption_; // Consumo energetico totale dalle 00:00
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
-    Time startTime_{NULL};          // Orario di accensione automatica 
-    Time offTime_{NULL};            // Orario di spegnimento automatico (opzionale)
+    Time startTime_{-1, -1};    // Orario di accensione automatica 
+    Time offTime_{-1, -1};      // Orario di spegnimento automatico (opzionale)
 
 public:
     // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
@@ -42,7 +42,7 @@ public:
 
     // Getter per ID, nome, potenza, stato ed orario e consumo energetico totale dalle 00:00.
     std::size_t getId(void) const { return id_; }
-    std::string &getName(void) const { return name_; }
+    const std::string &getName(void) const { return name_; }
     double getPowerConsumption(void) const { return powerConsumption_; }
     double getTotalEnergyConsumption(void) const { return totalEnergyConsumption_; }
     bool isDeviceOn(void) const { return isOn_; }
@@ -55,6 +55,6 @@ public:
 };
 
 // Ritorna lo stato del dispositivo in formato leggibile.
-std::ostream &operator<<(std::ostringstream &os, const DomoticDevice &obj);
+std::ostream &operator<<(std::ostringstream &os, const std::unique_ptr<DomoticDevice> &obj);
 
 #endif // DOMOTICDEVICE_H

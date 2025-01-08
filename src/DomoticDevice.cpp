@@ -44,12 +44,11 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
 DomoticDevice::~DomoticDevice() = default;
 
 // Ritorna lo stato del dispositivo in formato leggibile.
-std::ostream &operator<<(std::ostringstream &os, const DomoticDevice &obj){
-    std::ostringstream status;
-    status << "ID: " << id_
-           << "\nName: " << name_ 
-           << "\nStatus: " << (isOn_ ? "Acceso" : "Spento")
-           << "\nEnergyConsumption: " << calculateEnergyConsumption(const Time &startTime, const Time &offTime) << " kW\n";
-           << "\nTotalEnergyConsumption: " << totalEnergyConsumption_ << " kW\n"; // AGGIUNTA
-    return status.str();
+std::ostream &operator<<(std::ostream &os, const std::unique_ptr<DomoticDevice> &obj){
+    os << "ID: " << getId()
+           << "\nName: " << getName() 
+           << "\nStatus: " << (isDeviceOn() ? "Acceso" : "Spento")
+           << "\nEnergyConsumption: " << calculateEnergyConsumption(getStartTime(), getOffTime()) << " kW\n";
+           << "\nTotalEnergyConsumption: " << getTotalEnergyConsumption() << " kW\n";
+    return os;
 }

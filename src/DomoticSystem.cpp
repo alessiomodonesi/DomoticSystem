@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include "DomoticSystem.h"
+#include "FixedCycleDevice.h"
 
 // Costruttore: inizializza il sistema con un limite massimo di potenza.
 DomoticSystem::DomoticSystem(double powerConsumption)
@@ -33,10 +34,13 @@ double DomoticSystem::calculateCurrentConsumption(void) const
 class overConsumption
 {
     public:
-        bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
+        bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices_) const
         {
-            for (const auto &device : devices_)
-                return device->isDeviceOn();
+            for (const auto &device : devices_) {
+                if (device->isDeviceOn())
+                    return true; // Restituisci true se almeno un dispositivo è acceso.
+            }
+            return false; // Nessun dispositivo è acceso.
         }
 };
 
@@ -45,7 +49,7 @@ void DomoticSystem::handleOverConsumption(void)
 {
     while (calculateCurrentConsumption() > maxPowerConsumption_)
     {
-        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption());
+        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption);
         // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
 
         if (it != devices_.rend())
@@ -87,15 +91,6 @@ void DomoticSystem::removeDevice(std::size_t id)
 // Esegue un comando dato come input.
 void DomoticSystem::executeCommand(const std::string &command) {}
 
-// Mostra lo stato attuale del sistema.
-void DomoticSystem::displaySystemStatus(void) const
-{
-    for (const auto& device : devices_)
-        std::cout << device << std::endl;
-
-    std::cout << "Current total consumption: " << calculateCurrentConsumption() << " kW" << std::endl;
-}
-
 // Registra un evento in un log.
 void DomoticSystem::logEvent(const std::string &event) const
 {
@@ -122,22 +117,24 @@ void DomoticSystem::resetTimers(void) {
         
         // Setta offTime_ a NULL per i device non FixedCycle.
         else {
-            if (device->getOffTime() != NULL)
-                device->setOffTime(NULL);
+            if (device->getOffTime() != -1)
+                device->setOffTime(-1);
         }      
     }
 }
 
 // Riporta il sistema alle condizioni iniziali.
-void DomoticSystem::resetAll(void) {}
+std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_) {
+    double totalSystemEnergyConsumption = 0.0;
 
-// Mostra la lista di tutti i dispositivi.
-std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj) {
-    std::ostringstream show;
-    for (const auto &device : devices_)
-        show << device;
+    for (const auto &device : devices_) {
+        // Usa l'overload di << per DomoticDevice
+        os << *device << "\n";
 
-    // Manca il conteggio e la stampa di totalSystemEnergyConsumption_ che va fatto sommando i totalEnergyConsumption_ di ogni device
-    
-    return status.str();
+        // Somma il consumo energetico
+        totalSystemEnergyConsumption += device->getTotalEnergyConsumption();
+    }
+
+    os << "Total System Energy Consumption: " << totalSystemEnergyConsumption << " kW\n";
+    return os;
 }
