@@ -26,9 +26,9 @@ void DomoticDevice::turnOff()
 }
 
 // Imposta l’orario di accensione e spegnimento per il dispositivo.
-void setTimer(const Time &startTime, const Time &offTime) {
-    startTime_ = startTime;
-    offTime_ = offTime_;
+void DomoticDevice::setTimer(const Time &startTime, const Time &offTime) {
+    setStartTime(startTime);
+    setOffTime(offTime);
 }
 
 // Calcola il consumo energetico in base alle ore di funzionamento.
