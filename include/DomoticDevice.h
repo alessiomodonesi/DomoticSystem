@@ -38,7 +38,7 @@ public:
     double calculateEnergyConsumption(const Time &startTime, const Time &offTime);
 
     // Distruttore virtuale per supportare l'ereditarietà.
-    ~DomoticDevice(void);
+    virtual ~DomoticDevice();
 
     // Getter per ID, nome, potenza, stato ed orario.
     int getId(void) const { return id_; }

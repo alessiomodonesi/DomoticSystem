@@ -1,19 +1,19 @@
 // @author David Popusoi
 
-#ifndef CYCLEDEVICE_H
-#define CYCLEDEVICE_H
+#ifndef FIXEDCYCLEDEVICE_H
+#define FIXEDCYCLEDEVICE_H
 
 #include "DomoticDevice.h"
 
 // Rappresenta un dispositivo con un ciclo di funzionamento prefissato.
-class CycleDevice : public DomoticDevice
+class FixedCycleDevice : public DomoticDevice
 {
 private:
     const int cycleDuration_;  // Durata del ciclo in minuti
 
 public:
     // Costruttore: inizializza il dispositivo con nome, consumo e durata ciclo.
-    CycleDevice(const std::string &name, double powerConsumption, double cycleDuration);
+    FixedCycleDevice(const std::string &name, double powerConsumption, double cycleDuration);
 
     // Overloading del metodo per i dispositivi di tipo FixedCycle
     void setTimer(const Time &startTime, const int cycleDuration);
@@ -26,4 +26,4 @@ public:
     double getCycleDuration(void) const { return cycleDuration_; }
 };
 
-#endif // CYCLEDEVICE_H
+#endif // FIXEDCYCLEDEVICE_H
