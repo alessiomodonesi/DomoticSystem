@@ -17,7 +17,7 @@ struct Time {
     void resetTime(void);
 
     // Restituisce un orario formattato.
-    Time formattingTime(const Time &startTime, const int cycleDuration)
+    Time formattingTime(const Time &startTime, const int cycleDuration);
 
     // Getter per hour e minute.
     int getHours(void) const { return hours_; }  
@@ -26,7 +26,7 @@ struct Time {
 
 // HELPER FUNCTION
 Time operator-(const Time &a, const Time &b);
-bool operator==(const Time &a, const Time &b) const;
+bool operator==(const Time &a, const Time &b);
 std::ostream &operator<<(std::ostringstream &os, const Time &obj);
 
 #endif // TIME_H

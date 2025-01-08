@@ -7,7 +7,6 @@ add_library(
     src/DomoticSystem.cpp
     src/DomoticDevice.cpp
     src/FixedCycleDevice.cpp
-    src/ManualDevice.cpp
 )
 add_executable(main src/main.cpp)
 target_link_libraries(main ${PROJECT_NAME})

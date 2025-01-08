@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #include "DomoticSystem.h"
 
@@ -13,31 +14,6 @@ DomoticSystem::DomoticSystem(double powerConsumption)
         if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
             throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
     }
-
-// Function object per il predicato del find_if nel metodo successivo
-class overConsumption
-{
-    public:
-        bool operator()(const  std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
-        {
-            return device.isOn();
-        }
-}
-
-// Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
-void DomoticSystem::handleOverConsumption(void)
-{
-    while (calcultedCurrentConsumption() > maxPowerConsumption_)
-    {
-        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption());
-        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
-
-        if (it != devices_.rend())
-            *it.turnOff();
-        else
-            throw std::runtime_error("all devices are off");
-    }
-}
 
 // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
 double DomoticSystem::calculateCurrentConsumption(void) const
@@ -49,6 +25,32 @@ double DomoticSystem::calculateCurrentConsumption(void) const
             totalConsumption += device.getPowerConsumption();
     }
     return totalConsumption;
+}
+
+// Function object per il predicato del find_if nel metodo successivo
+class overConsumption
+{
+    public:
+        bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
+        {
+            // for (const auto &device : devices_)
+                return device.isOn();
+        }
+};
+
+// Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
+void DomoticSystem::handleOverConsumption(void)
+{
+    while (calculateCurrentConsumption() > maxPowerConsumption_)
+    {
+        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption());
+        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
+
+        if (it != devices_.rend())
+            *it.turnOff();
+        else
+            throw std::runtime_error("all devices are off");
+    }
 }
 
 // Aggiunge un dispositivo alla lista gestita.
@@ -64,11 +66,11 @@ class idIsPresent
     public:
         idIsPresent(std::size_t id) : ID{id} {}
 
-        bool operator()(const DomoticDevice &device) const
+        bool operator()(std::unique_ptr<DomoticDevice> device) const
         {
-            return device.getID() == ID;
+            return device.getId() == ID;
         }
-}
+};
 
 // Rimuove un dispositivo dalla lista tramite il suo ID.
 void DomoticSystem::removeDevice(std::size_t id)
@@ -107,11 +109,11 @@ void DomoticSystem::logEvent(const std::string &event) const
 // COMANDI PER IL DEBUG:
 
 // Resetta il tempo del sistema.
-void resetTime(void) {}
+void DomoticSystem::resetTime(void) {}
 
 // Rimuove i timer di tutti i dispositivi.
-void resetTimers(void) {
-    for (const auto &device : devices) {
+void DomoticSystem::resetTimers(void) {
+    for (const auto &device : devices_) {
         // Rimuove i timer dei device FixedCycle.
         if (auto fixedDevice = dynamic_cast<FixedCycleDevice*>(device.get()))
             fixedDevice->stopCycle();
@@ -125,7 +127,7 @@ void resetTimers(void) {
 }
 
 // Riporta il sistema alle condizioni iniziali.
-void resetAll(void) {}
+void DomoticSystem::resetAll(void) {}
 
 // Mostra la lista di tutti i dispositivi.
 std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj) {}

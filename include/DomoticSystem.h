@@ -20,11 +20,11 @@ private:
     double maxPowerConsumption_;                             // Potenza massima consentita (kW)
     static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5; // Potenza massima consentita di default
 
-    // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
-    void handleOverConsumption(void);
-
     // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
     double calculateCurrentConsumption(void) const;
+    
+    // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
+    void handleOverConsumption(void);
 
 public:
     // Costruttore: inizializza il sistema con un limite massimo di potenza.

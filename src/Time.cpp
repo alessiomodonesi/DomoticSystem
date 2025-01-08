@@ -53,7 +53,7 @@ Time operator-(const Time &a, const Time &b) {
     return new Time(h, m);
 }
 
-bool operator==(const Time &a, const Time &b) const {
+bool operator==(const Time &a, const Time &b) {
     return (a.getHours() == b.getHours()) && (a.getMinutes() == b.getMinutes());
 } 
 
