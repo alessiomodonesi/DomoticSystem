@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
+#include <stdexcept>
 
 #include "DomoticSystem.h"
 
@@ -21,8 +23,8 @@ double DomoticSystem::calculateCurrentConsumption(void) const
     double totalConsumption = 0;
     for (const auto &device : devices_)
     {
-        if(device->isOn())
-            totalConsumption += device.getPowerConsumption();
+        if(device->isDeviceOn())
+            totalConsumption += device->getPowerConsumption();
     }
     return totalConsumption;
 }
@@ -34,7 +36,7 @@ class overConsumption
         bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
         {
             for (const auto &device : devices_)
-                return device->isOn();
+                return device->isDeviceOn();
         }
 };
 
@@ -89,7 +91,7 @@ void DomoticSystem::executeCommand(const std::string &command) {}
 void DomoticSystem::displaySystemStatus(void) const
 {
     for (const auto& device : devices_)
-        std::cout << device->getStatus() << std::endl;
+        std::cout << device << std::endl;
 
     std::cout << "Current total consumption: " << calculateCurrentConsumption() << " kW" << std::endl;
 }
@@ -97,13 +99,13 @@ void DomoticSystem::displaySystemStatus(void) const
 // Registra un evento in un log.
 void DomoticSystem::logEvent(const std::string &event) const
 {
-    static const std::string fileName = "log.txt";
+    constexpr const char* fileName = "log.txt";
     std::ofstream logFile(fileName, std::ios_base::app);
 
-    if (logFile.is_open())
-        logFile << event << std::endl;
-    else
-        throw std::runtime_error("cannot open log file");
+    if (!logFile.is_open())
+        throw std::runtime_error("Cannot open log file: " + std::string(fileName));
+
+    logFile << event << '\n';
 }
 
 // COMANDI PER IL DEBUG
