@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <fstream>
 #include <stdexcept>
+#include <sstream>
 
 #include "DomoticSystem.h"
 #include "FixedCycleDevice.h"
@@ -31,6 +32,13 @@ void DomoticSystem::initializeCommands(void)
     {
         if (params.size() == 2) 
         {
+            if(params[0] == "time") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            {
+                // parse params[1], dovrebbe essere in formato HH:MM secondo l'esempio del prof
+
+                //storedTime_.setTime(hours, minutes);
+            }
+
             // trova device
 
             // se on/off secondo parametro
@@ -46,9 +54,7 @@ void DomoticSystem::initializeCommands(void)
             // DomoticDevice::setTimer()
         } 
         else 
-        {
             // log errore
-        }
     };
 
     commands_["rm"] = [this](const std::vector<std::string>& params) 
@@ -60,9 +66,7 @@ void DomoticSystem::initializeCommands(void)
             // log
         } 
         else 
-        {
             // log errore
-        }
     };
 
     commands_["show"] = [this](const std::vector<std::string>& params) 
@@ -70,34 +74,28 @@ void DomoticSystem::initializeCommands(void)
         // std::cout << *this;
     };
 
-    commands_["set time"] = [this](const std::vector<std::string>& params) 
-    {
-        if (params.size() >= 2) 
-        {
-            int hours = std::stoi(params[0]);
-            int minutes = std::stoi(params[1]);
-            storedTime_.setTime(hours, minutes);
-            // log
-        } 
+    commands_["reset"] = [this](const std::vector<std::string>& params) {
+
+        if(params.size() > 0){
+            if(params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            {
+                resetTimers();
+                // log
+            }
+                
+            else if(params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            {
+                resetAll();
+                // log
+            }
+            else
+                // log errore
+        }
         else 
         {
-            // log errore
+            resetTime();
+            // log
         }
-    };
-
-    commands_["reset time"] = [this](const std::vector<std::string>& params) {
-        storedTime_.resetTime();
-        // log
-    };
-
-    commands_["reset timers"] = [this](const std::vector<std::string>& params) {
-        resetTimers();
-        // log
-    };
-
-    commands_["reset all"] = [this](const std::vector<std::string>& params) {
-        resetAll();
-        // log
     };
 }
 
@@ -168,7 +166,14 @@ void DomoticSystem::removeDevice(std::size_t id)
 }
 
 // Esegue un comando dato come input.
-void DomoticSystem::executeCommand(const std::string &command) {}
+void DomoticSystem::executeCommand(const std::string &input) 
+{   
+    std::istringstream stream(input);
+    std::string command;
+    std::getline(stream, command, ' '); // 
+
+    std::vector<std::string> params;
+}
 
 // Registra un evento in un log.
 void DomoticSystem::logEvent(const std::string &event) const
@@ -185,7 +190,10 @@ void DomoticSystem::logEvent(const std::string &event) const
 // COMANDI PER IL DEBUG
 
 // Resetta il tempo del sistema.
-void DomoticSystem::resetTime(void) {}
+void DomoticSystem::resetTime(void) 
+{
+    storedTime_.resetTime();
+}
 
 // Rimuove i timer di tutti i dispositivi.
 void DomoticSystem::resetTimers(void) {

@@ -46,7 +46,7 @@ class DomoticSystem
         void removeDevice(std::size_t id);
 
         // Esegue un comando dato come input.
-        void executeCommand(const std::string &command);
+        void executeCommand(const std::string &input);
 
         // Registra un evento in un log.
         void logEvent(const std::string &event) const;
