@@ -165,10 +165,10 @@ void DomoticSystem::removeDevice(std::size_t id)
 }
 
 // Esegue un comando dato come input.
-// MANCA METTERE A LOWER CASE L'INPUT
 void DomoticSystem::executeCommand(const std::string &input) 
 {   
-    std::istringstream stream(input);
+    std::string copy = std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) { return std::tolower(c); }); 
+    std::istringstream stream(copy);
     std::string command;
     std::getline(stream, command, ' '); // Prendo il primo termine della stringa input, il "comando"  
 
@@ -182,9 +182,9 @@ void DomoticSystem::executeCommand(const std::string &input)
 
     auto it = commands_.find(command);
     if (it != commands_.end()) {
-        it->second(params);  // Passa i parametri
+        it->second(params);  // Passa i parametri alla funzione nella mappa comandi
     } else 
-        // log errore o eccezione?
+        // log errore
 }
 
 // Registra un evento in un log.
