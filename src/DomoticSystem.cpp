@@ -23,21 +23,43 @@ void DomoticSystem::initializeCommands(void)
     {
         if (params.size() == 2)
         {
-            if (params[0] == "time") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            if (params[0] == "time") // Imposta il tempo del sistema, non di un device
             {
                 // parse params[1], dovrebbe essere in formato HH:MM secondo l'esempio del prof
 
                 // storedTime_.setTime(hours, minutes);
             }
 
-            // trova device
+            else
+            {
+                auto it = std::find_if(devices_.begin(), devices_.end(), idIsPresent(params[0]));
+                if (it != devices_.end()) // Trova il device
+                {
+                    
+                        if (auto domoticDevice = dynamic_cast<DomoticDevice *>(it.get()))
+                        {
+                            if (params[1] == "on") domoticDevice->turnOn();
+                            else if (params[1] == "off") domoticDevice->turnOff();
+                            
+                            //else if (params[1])
+                            // se invece e' specificato un tempo, controlla tipo di device
+                            // DomoticDevice::setTimer() / FixedCycleDevice::setTimer()
+                            // (notare che il terzo parametro e' opzionale e solo usato per device manuali)
 
-            // se on/off secondo parametro
-            // DomoticDevice::turnOn() / DomoticDevice::turnOff()
 
-            // se invece e' specificato un tempo, controlla tipo di device
-            // DomoticDevice::setTimer() / FixedCycleDevice::setTimer()
-            // (notare che il terzo parametro e' opzionale e solo usato per device manuali)
+                            else
+                            {
+                                // log errore parametro
+                            }
+                        }
+                        else
+                            throw std::runtime_error("device not DomoticDevice");
+                    }
+                }
+                else
+                    throw std::runtime_error("device not found");
+            }
+
         }
         else if (params.size() >= 3)
         {
