@@ -252,7 +252,7 @@ void f(vector<int> &v)
 // FUNCTION OBJECT
 class Larger_than
 {
-    int v : public : Largen_than(int vv) : v{vv} {}
+int v : public : Largen_than(int vv) : v{vv} {}
 
     bool operator()(int x) const { return x > v; } // override operator()
 }
