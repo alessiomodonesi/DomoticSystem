@@ -15,12 +15,10 @@ protected:
     const std::size_t id_;          // ID univoco del dispositivo
     const std::string name_;        // Nome del dispositivo
     const double powerConsumption_; // Potenza consumata (negativa) o prodotta (positiva)
+    double totalEnergyConsumption_; // Consumo energetico totale dalle 00:00
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
     Time startTime_{NULL};          // Orario di accensione automatica 
     Time offTime_{NULL};            // Orario di spegnimento automatico (opzionale)
-
-    // AGGIUNTA
-    double totalEnergyConsumption_; // Consumo energetico totale dalle 00:00
 
 public:
     // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
@@ -46,11 +44,10 @@ public:
     std::size_t getId(void) const { return id_; }
     std::string &getName(void) const { return name_; }
     double getPowerConsumption(void) const { return powerConsumption_; }
+    double getTotalEnergyConsumption(void) const { return totalEnergyConsumption_; }
     bool isDeviceOn(void) const { return isOn_; }
     Time getStartTime(void) const { return startTime_;}
     Time getOffTime(void) const { return offTime_;}
-
-    double getTotalEnergyConsumption(void) const { return totalEnergyConsumption_; } // AGGIUNTA
 
     // Setter per startTime_ and offTime_.
     void setStartTime(Time startTime) { startTime_ = startTime; }
