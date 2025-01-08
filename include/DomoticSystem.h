@@ -51,7 +51,7 @@ public:
     void resetTime(void);
 
     // Rimuove i timer di tutti i dispositivi.
-    void stopAllCycle(void);
+    void resetTimers(void);
 
     // Riporta il sistema alle condizioni iniziali.
     void resetAll(void);
