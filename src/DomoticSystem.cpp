@@ -21,7 +21,7 @@ double DomoticSystem::calculateCurrentConsumption(void) const
     double totalConsumption = 0;
     for (const auto &device : devices_)
     {
-        if(device.isOn())
+        if(device->isOn())
             totalConsumption += device.getPowerConsumption();
     }
     return totalConsumption;
@@ -33,8 +33,8 @@ class overConsumption
     public:
         bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices__) const
         {
-            // for (const auto &device : devices_)
-                return device.isOn();
+            for (const auto &device : devices_)
+                return device->isOn();
         }
 };
 
@@ -47,7 +47,7 @@ void DomoticSystem::handleOverConsumption(void)
         // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
 
         if (it != devices_.rend())
-            *it.turnOff();
+            *it->turnOff();
         else
             throw std::runtime_error("all devices are off");
     }
@@ -68,7 +68,7 @@ class idIsPresent
 
         bool operator()(std::unique_ptr<DomoticDevice> device) const
         {
-            return device.getId() == ID;
+            return device->getId() == ID;
         }
 };
 
@@ -89,7 +89,7 @@ void DomoticSystem::executeCommand(const std::string &command) {}
 void DomoticSystem::displaySystemStatus(void) const
 {
     for (const auto& device : devices_)
-        std::cout << device.getStatus() << std::endl;
+        std::cout << device->getStatus() << std::endl;
 
     std::cout << "Current total consumption: " << calculateCurrentConsumption() << " kW" << std::endl;
 }
@@ -106,7 +106,7 @@ void DomoticSystem::logEvent(const std::string &event) const
         throw std::runtime_error("cannot open log file");
 }
 
-// COMANDI PER IL DEBUG:
+// COMANDI PER IL DEBUG
 
 // Resetta il tempo del sistema.
 void DomoticSystem::resetTime(void) {}
@@ -116,12 +116,12 @@ void DomoticSystem::resetTimers(void) {
     for (const auto &device : devices_) {
         // Rimuove i timer dei device FixedCycle.
         if (auto fixedDevice = dynamic_cast<FixedCycleDevice*>(device.get()))
-            fixedDevice.stopCycle();
+            fixedDevice->stopCycle();
         
         // Setta offTime_ a NULL per i device non FixedCycle.
         else {
-            if (device.getOffTime() != NULL)
-                device.setOffTime(NULL);
+            if (device->getOffTime() != NULL)
+                device->setOffTime(NULL);
         }      
     }
 }
