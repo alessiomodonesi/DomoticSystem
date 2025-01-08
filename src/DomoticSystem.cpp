@@ -49,7 +49,7 @@ void DomoticSystem::handleOverConsumption(void)
 {
     while (calculateCurrentConsumption() > maxPowerConsumption_)
     {
-        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption);
+        auto it = std::find_if(devices_.rbegin(), devices_.rend(), overConsumption());
         // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
 
         if (it != devices_.rend())
