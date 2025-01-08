@@ -20,7 +20,7 @@ struct Time
     void resetTime(void);
 
     // Restituisce un orario formattato.
-    Time formattingTime(const Time &startTime, const int cycleDuration);
+    static Time formattingTime(const Time &startTime, const int cycleDuration);
 
     // Getter per hour e minute.
     int getHours(void) const { return hours_; }

@@ -13,7 +13,7 @@ private:
 
 public:
     // Costruttore: inizializza il dispositivo con nome, consumo e durata ciclo.
-    FixedCycleDevice(const std::string &name, int powerConsumption, int cycleDuration);
+    FixedCycleDevice(const std::string &name, double powerConsumption, int cycleDuration);
 
     // Overloading del metodo per i dispositivi di tipo FixedCycle
     void setTimer(const Time &startTime, int cycleDuration);
