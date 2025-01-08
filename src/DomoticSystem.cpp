@@ -117,13 +117,9 @@ double DomoticSystem::calculateCurrentConsumption(void) const
 class overConsumption
 {
     public:
-        bool operator()(const std::vector<std::unique_ptr<DomoticDevice>> &devices_) const
+        bool operator()(const std::unique_ptr<DomoticDevice> &device) const
         {
-            for (const auto &device : devices_) {
-                if (device->isDeviceOn())
-                    return true; // Restituisci true se almeno un dispositivo è acceso.
-            }
-            return false; // Nessun dispositivo è acceso.
+            return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
         }
 };
 
@@ -136,9 +132,9 @@ void DomoticSystem::handleOverConsumption(void)
         // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
 
         if (it != devices_.rend())
-            *it->turnOff();
+            (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
         else
-            throw std::runtime_error("all devices are off");
+            throw std::runtime_error("Overconsumption cannot be resolved: all devices are off.");
     }
 }
 
@@ -200,8 +196,8 @@ void DomoticSystem::resetTimers(void) {
         
         // Setta offTime_ a NULL per i device non FixedCycle.
         else {
-            if (device->getOffTime() != -1)
-                device->setOffTime(-1);
+            if (device->getOffTime() != Time(-1, -1))
+                device->setOffTime(Time(-1, -1));
         }      
     }
 }

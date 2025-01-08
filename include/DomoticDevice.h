@@ -55,6 +55,6 @@ class DomoticDevice
 };
 
 // Ritorna lo stato del dispositivo in formato leggibile.
-std::ostream &operator<<(std::ostringstream &os, const std::unique_ptr<DomoticDevice> &obj);
+std::ostream& operator<<(std::ostream& os, const DomoticDevice& device);
 
 #endif // DOMOTICDEVICE_H
