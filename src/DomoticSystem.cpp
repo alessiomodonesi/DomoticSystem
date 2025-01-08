@@ -135,6 +135,7 @@ std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj) {
     for (const auto &device : devices_)
         show << device;
 
+    // Manca il conteggio e la stampa di totalSystemEnergyConsumption_ che va fatto sommando i totalEnergyConsumption_ di ogni device
     
     return status.str();
 }
