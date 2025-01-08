@@ -13,9 +13,9 @@
 class DomoticDevice
 {
 protected:
-    const int id_;                  // ID univoco del dispositivo
+    const std::size_t id_;          // ID univoco del dispositivo
     const std::string name_;        // Nome del dispositivo
-    const double powerConsumption_; // Potenza consumata (positiva) o prodotta (negativa)
+    const double powerConsumption_; // Potenza consumata (negativa) o prodotta (positiva)
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
     Time startTime_{NULL};          // Orario di accensione automatica 
     Time offTime_{NULL};            // Orario di spegnimento automatico (opzionale)
@@ -41,7 +41,7 @@ public:
     virtual ~DomoticDevice();
 
     // Getter per ID, nome, potenza, stato ed orario.
-    int getId(void) const { return id_; }
+    std::size_t getId(void) const { return id_; }
     std::string &getName(void) const { return name_; }
     double getPowerConsumption(void) const { return powerConsumption_; }
     bool isDeviceOn(void) const { return isOn_; }
