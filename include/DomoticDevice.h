@@ -3,7 +3,6 @@
 #ifndef DOMOTICDEVICE_H
 #define DOMOTICDEVICE_H
 
-#include <string>
 #include "Time.h"
 
 // Classe base per rappresentare un dispositivo domotico generico.

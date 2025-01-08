@@ -1,13 +1,5 @@
 // @author Tommaso Silvestrin
 
-#include <vector>
-#include <memory>
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <fstream>
-#include <stdexcept>
-
 #include "DomoticSystem.h"
 #include "FixedCycleDevice.h"
 

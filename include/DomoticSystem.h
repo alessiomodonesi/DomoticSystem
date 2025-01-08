@@ -4,9 +4,11 @@
 #define DOMOTICSYSTEM_H
 
 #include <vector>
+#include <unordered_map>
+#include <functional>
+#include <algorithm>
 #include <memory>
-#include <string>
-#include <iostream>
+#include <fstream>
 
 #include "DomoticDevice.h"
 #include "Time.h"
