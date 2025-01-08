@@ -1,5 +1,4 @@
-#include <stdexcept>
-#include <sstream>
+// @author Alessio Modonesi
 
 #include "Time.h"
 

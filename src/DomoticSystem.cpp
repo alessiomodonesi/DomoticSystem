@@ -1,14 +1,5 @@
 // @author Tommaso Silvestrin
 
-#include <vector>
-#include <memory>
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <fstream>
-#include <stdexcept>
-#include <sstream>
-
 #include "DomoticSystem.h"
 #include "FixedCycleDevice.h"
 
@@ -19,12 +10,10 @@ DomoticSystem::DomoticSystem(double powerConsumption)
         if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
             throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
 
-        // *Aggiunto*
         initializeCommands();
     }
 
-// *Aggiunto*
-// Inizializza i comandi presenti nell'interfaccia utente
+// Inizializza i comandi presenti nell'interfaccia utente.
 void DomoticSystem::initializeCommands(void)
 {
 

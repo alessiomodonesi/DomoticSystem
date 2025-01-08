@@ -1,10 +1,5 @@
 // @author Alessio Modonesi
 
-#include <iostream>
-#include <stdexcept>
-#include <sstream>
-#include <string>
-
 #include "DomoticDevice.h"
 
 // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
