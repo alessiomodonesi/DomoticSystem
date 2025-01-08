@@ -27,6 +27,44 @@ DomoticSystem::DomoticSystem(double powerConsumption)
 void DomoticSystem::initializeCommands(void)
 {
 
+    commands_["set"] = [this](const std::vector<std::string>& params) 
+    {
+        if (params.size() == 2) 
+        {
+            // trova device
+
+            // se on/off secondo parametro
+            // DomoticDevice::turnOn() / DomoticDevice::turnOff()
+
+            // se invece e' specificato un tempo, controlla tipo di device
+            // DomoticDevice::setTimer() / FixedCycleDevice::setTimer()
+            // (notare che il terzo parametro e' opzionale e solo usato per device manuali)
+        } 
+        else if (params.size() >= 3) 
+        {
+            // trova device e controlla che sia DomoticDevice, altrimenti ignora, dato che FixedCycleDevice e' gestito sopra
+            // DomoticDevice::setTimer()
+        } 
+        else 
+        {
+            // log errore
+        }
+    };
+
+    commands_["rm"] = [this](const std::vector<std::string>& params) 
+    {
+        if (params.size() > 0) 
+        {
+            // trova device e controlla che sia FixedCycleDevice
+            // FixedCycleDevice::stopCycle()
+            // log
+        } 
+        else 
+        {
+            // log errore
+        }
+    };
+
     commands_["show"] = [this](const std::vector<std::string>& params) 
     {
         // std::cout << *this;
