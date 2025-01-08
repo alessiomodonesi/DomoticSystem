@@ -13,10 +13,55 @@
 
 // Costruttore: inizializza il sistema con un limite massimo di potenza.
 DomoticSystem::DomoticSystem(double powerConsumption)
-    : maxPowerConsumption_{powerConsumption}, totalSystemEnergyConsumption_{0} {    // AGGIUNTA
+    : maxPowerConsumption_{powerConsumption}, totalSystemEnergyConsumption_{0} 
+    {
         if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
             throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
+
+        // *Aggiunto*
+        initializeCommands();
     }
+
+// *Aggiunto*
+// Inizializza i comandi presenti nell'interfaccia utente
+void DomoticSystem::initializeCommands(void)
+{
+
+    commands_["show"] = [this](const std::vector<std::string>& params) 
+    {
+        // std::cout << *this;
+    };
+
+    commands_["set time"] = [this](const std::vector<std::string>& params) 
+    {
+        if (params.size() >= 2) 
+        {
+            int hours = std::stoi(params[0]);
+            int minutes = std::stoi(params[1]);
+            storedTime_.setTime(hours, minutes);
+            // log
+        } 
+        else 
+        {
+            // log errore
+        }
+    };
+
+    commands_["reset time"] = [this](const std::vector<std::string>& params) {
+        storedTime_.resetTime();
+        // log
+    };
+
+    commands_["reset timers"] = [this](const std::vector<std::string>& params) {
+        resetTimers();
+        // log
+    };
+
+    commands_["reset all"] = [this](const std::vector<std::string>& params) {
+        resetAll();
+        // log
+    };
+}
 
 // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
 double DomoticSystem::calculateCurrentConsumption(void) const
