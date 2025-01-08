@@ -16,7 +16,7 @@
 class DomoticSystem
 {
 private:
-    std::unique_ptr<std::vector<DomoticDevice>> devices_;    // Lista di dispositivi gestiti dal sistema
+    std::vector<std::unique_ptr<DomoticDevice>> devices_;    // Lista di dispositivi gestiti dal sistema
     double maxPowerConsumption_;                             // Potenza massima consentita (kW)
     static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5; // Potenza massima consentita di default
 
@@ -31,10 +31,10 @@ public:
     DomoticSystem(double powerConsumption = DEFAULT_POWER_CONSUMPTION);
 
     // Aggiunge un dispositivo alla lista gestita.
-    void addDevice(const DomoticDevice &device);
+    void addDevice(std::unique_ptr<DomoticDevice> device);
 
     // Rimuove un dispositivo dalla lista tramite il suo ID.
-    void removeDevice(int id);
+    void removeDevice(std::size_t id);
 
     // Esegue un comando dato come input.
     void executeCommand(const std::string &command);
