@@ -21,6 +21,14 @@ class DomoticSystem
         static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5; // Potenza massima consentita di default
         double totalSystemEnergyConsumption_;                    // Consumo energetico totale del sistema dalle 00:00
 
+        // *Aggiunto*
+        std::unordered_map<std::string, std::function<void(const std::vector<std::string>&)>> commands_;   // Lista comandi disponibili per l'interfaccia utente
+        Time storedTime_;                                                                                  // Tempo del sistema
+
+        // *Aggiunto*
+        // Inizializza i comandi presenti nell'interfaccia utente
+        void initializeCommands(void);
+
         // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
         double calculateCurrentConsumption(void) const;
     
