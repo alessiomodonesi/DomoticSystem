@@ -9,10 +9,10 @@ FixedCycleDevice::FixedCycleDevice(const std::string &name, double powerConsumpt
 
 // Setta l'offTime del device di tipo FixedCycle con l'ausilio della struct Time
 void FixedCycleDevice::setTimer(const Time &startTime, const int cycleDuration) {
-    offTime_ = Time::formattingTime(&startTime, cycleDuration);
+    setOffTime(Time::formattingTime(&startTime, cycleDuration));
 }
 
 // Interrompe manualmente un ciclo in corso.
 void FixedCycleDevice::stopCycle(void) {
-    offTime_ = NULL;
+    setOffTime(NULL);
 }

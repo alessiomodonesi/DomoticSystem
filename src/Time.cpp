@@ -25,7 +25,6 @@ void Time::resetTime(void) {
     setTime(0, 0);
 }
 
-
 // Restituisce un orario formattato.
 Time Time::formattingTime(const Time &startTime, const int cycleDuration)
 {   
