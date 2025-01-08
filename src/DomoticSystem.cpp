@@ -10,7 +10,7 @@
 
 // Costruttore: inizializza il sistema con un limite massimo di potenza.
 DomoticSystem::DomoticSystem(double powerConsumption)
-    : maxPowerConsumption_{powerConsumption} {
+    : maxPowerConsumption_{powerConsumption}, totalSystemEnergyConsumption_{0} {    // AGGIUNTA
         if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
             throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
     }
@@ -116,12 +116,12 @@ void DomoticSystem::resetTimers(void) {
     for (const auto &device : devices_) {
         // Rimuove i timer dei device FixedCycle.
         if (auto fixedDevice = dynamic_cast<FixedCycleDevice*>(device.get()))
-            fixedDevice->stopCycle();
+            fixedDevice.stopCycle();
         
         // Setta offTime_ a NULL per i device non FixedCycle.
         else {
             if (device.getOffTime() != NULL)
-                device->setOffTime(NULL);
+                device.setOffTime(NULL);
         }      
     }
 }
@@ -130,4 +130,11 @@ void DomoticSystem::resetTimers(void) {
 void DomoticSystem::resetAll(void) {}
 
 // Mostra la lista di tutti i dispositivi.
-std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj) {}
+std::ostream &operator<<(std::ostringstream &os, const DomoticSystem &obj) {
+    std::ostringstream show;
+    for (const auto &device : devices_)
+        show << device;
+
+    
+    return status.str();
+}

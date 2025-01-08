@@ -20,6 +20,9 @@ protected:
     Time startTime_{NULL};          // Orario di accensione automatica 
     Time offTime_{NULL};            // Orario di spegnimento automatico (opzionale)
 
+    // AGGIUNTA
+    double totalEnergyConsumption_; // Consumo energetico totale dalle 00:00
+
 public:
     // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
     DomoticDevice(const std::string &name, double powerConsumption);
@@ -40,13 +43,15 @@ public:
     // Distruttore virtuale per supportare l'ereditarietà.
     virtual ~DomoticDevice();
 
-    // Getter per ID, nome, potenza, stato ed orario.
+    // Getter per ID, nome, potenza, stato ed orario e consumo energetico totale dalle 00:00.
     std::size_t getId(void) const { return id_; }
     std::string &getName(void) const { return name_; }
     double getPowerConsumption(void) const { return powerConsumption_; }
     bool isDeviceOn(void) const { return isOn_; }
     Time getStartTime(void) const { return startTime_;}
     Time getOffTime(void) const { return offTime_;}
+
+    double getTotalEnergyConsumption(void) const { return totalEnergyConsumption_; } // AGGIUNTA
 
     // Setter per startTime_ and offTime_.
     void setStartTime(Time startTime) { startTime_ = startTime; }

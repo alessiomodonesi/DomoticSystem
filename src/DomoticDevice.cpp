@@ -9,7 +9,7 @@
 
 // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
 DomoticDevice::DomoticDevice(const std::string &name, double powerConsumption)
-    : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption) {}
+    : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption), totalEnergyConsumption_(0) {}  // AGGIUNTA
 
 // Metodo per accendere il dispositivo.
 void DomoticDevice::turnOn() 
@@ -36,6 +36,7 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
 {
     Time intervals = offTime - startTime;
     double useTime = intervals.h + (intervals.m / 60);
+    totalEnergyConsumption_ += powerConsumption_ * useTime; // AGGIUNTA
     return powerConsumption_ * useTime;
 }
 
@@ -49,5 +50,6 @@ std::ostream &operator<<(std::ostringstream &os, const DomoticDevice &obj){
            << "\nName: " << name_ 
            << "\nStatus: " << (isOn_ ? "Acceso" : "Spento")
            << "\nEnergyConsumption: " << calculateEnergyConsumption(const Time &startTime, const Time &offTime) << " kW\n";
+           << "\nTotalEnergyConsumption: " << totalEnergyConsumption_ << " kW\n"; // AGGIUNTA
     return status.str();
 }

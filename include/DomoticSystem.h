@@ -20,6 +20,9 @@ private:
     double maxPowerConsumption_;                             // Potenza massima consentita (kW)
     static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5; // Potenza massima consentita di default
 
+    // AGGIUNTA
+    double totalSystemEnergyConsumption_; // Consumo energetico totale del sistema dalle 00:00
+
     // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
     double calculateCurrentConsumption(void) const;
     
@@ -29,6 +32,9 @@ private:
 public:
     // Costruttore: inizializza il sistema con un limite massimo di potenza.
     DomoticSystem(double powerConsumption = DEFAULT_POWER_CONSUMPTION);
+
+    // AGGIUNTA
+    double getTotalSystemEnergyConsumption(void) const { return totalSystemEnergyConsumption_; }
 
     // Aggiunge un dispositivo alla lista gestita.
     void addDevice(std::unique_ptr<DomoticDevice> device);
