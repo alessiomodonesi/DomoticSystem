@@ -5,14 +5,15 @@
 
 #include <string>
 
-struct Time {
+struct Time
+{
     int hours_;
     int minutes_;
 
     // Costruttore
     Time(int h = 0, int m = 0);
 
-    // Va a una specifica ora del giorno. 
+    // Va a una specifica ora del giorno.
     void setTime(int h, int m);
 
     // Resetta il tempo del sistema, riportandolo all’orario 00:00.
@@ -22,8 +23,8 @@ struct Time {
     Time formattingTime(const Time &startTime, const int cycleDuration);
 
     // Getter per hour e minute.
-    int getHours(void) const { return hours_; }  
-    int getMinutes(void) const { return minutes_; }  
+    int getHours(void) const { return hours_; }
+    int getMinutes(void) const { return minutes_; }
 };
 
 // HELPER FUNCTION

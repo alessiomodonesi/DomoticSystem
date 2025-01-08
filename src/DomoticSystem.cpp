@@ -5,27 +5,27 @@
 
 // Costruttore: inizializza il sistema con un limite massimo di potenza.
 DomoticSystem::DomoticSystem(double powerConsumption)
-    : maxPowerConsumption_{powerConsumption}, totalSystemEnergyConsumption_{0} 
-    {
-        if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
-            throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
+    : maxPowerConsumption_{powerConsumption}, totalSystemEnergyConsumption_{0}
+{
+    if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
+        throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
 
-        initializeCommands();
-    }
+    initializeCommands();
+}
 
 // Inizializza i comandi presenti nell'interfaccia utente.
 void DomoticSystem::initializeCommands(void)
 {
 
-    commands_["set"] = [this](const std::vector<std::string>& params) 
+    commands_["set"] = [this](const std::vector<std::string> &params)
     {
-        if (params.size() == 2) 
+        if (params.size() == 2)
         {
-            if(params[0] == "time") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            if (params[0] == "time") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
             {
                 // parse params[1], dovrebbe essere in formato HH:MM secondo l'esempio del prof
 
-                //storedTime_.setTime(hours, minutes);
+                // storedTime_.setTime(hours, minutes);
             }
 
             // trova device
@@ -36,51 +36,52 @@ void DomoticSystem::initializeCommands(void)
             // se invece e' specificato un tempo, controlla tipo di device
             // DomoticDevice::setTimer() / FixedCycleDevice::setTimer()
             // (notare che il terzo parametro e' opzionale e solo usato per device manuali)
-        } 
-        else if (params.size() >= 3) 
+        }
+        else if (params.size() >= 3)
         {
             // trova device e controlla che sia DomoticDevice, altrimenti ignora, dato che FixedCycleDevice e' gestito sopra
             // DomoticDevice::setTimer()
-        } 
-        else 
-            // log errore
+        }
+        else
+        // log errore
     };
 
-    commands_["rm"] = [this](const std::vector<std::string>& params) 
+    commands_["rm"] = [this](const std::vector<std::string> &params)
     {
-        if (params.size() > 0) 
+        if (params.size() > 0)
         {
             // trova device e controlla che sia FixedCycleDevice
             // FixedCycleDevice::stopCycle()
             // log
-        } 
-        else 
-            // log errore
+        }
+        else
+        // log errore
     };
 
-    commands_["show"] = [this](const std::vector<std::string>& params) 
+    commands_["show"] = [this](const std::vector<std::string> &params)
     {
         // std::cout << *this;
     };
 
-    commands_["reset"] = [this](const std::vector<std::string>& params) {
-
-        if(params.size() > 0){
-            if(params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+    commands_["reset"] = [this](const std::vector<std::string> &params)
+    {
+        if (params.size() > 0)
+        {
+            if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
             {
                 resetTimers();
                 // log
             }
-                
-            else if(params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+
+            else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
             {
                 resetAll();
                 // log
             }
             else
-                // log errore
+            // log errore
         }
-        else 
+        else
         {
             resetTime();
             // log
@@ -94,7 +95,7 @@ double DomoticSystem::calculateCurrentConsumption(void) const
     double totalConsumption = 0;
     for (const auto &device : devices_)
     {
-        if(device->isDeviceOn())
+        if (device->isDeviceOn())
             totalConsumption += device->getPowerConsumption();
     }
     return totalConsumption;
@@ -103,11 +104,11 @@ double DomoticSystem::calculateCurrentConsumption(void) const
 // Function object per il predicato del find_if nel metodo successivo
 class overConsumption
 {
-    public:
-        bool operator()(const std::unique_ptr<DomoticDevice> &device) const
-        {
-            return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
-        }
+public:
+    bool operator()(const std::unique_ptr<DomoticDevice> &device) const
+    {
+        return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
+    }
 };
 
 // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
@@ -135,13 +136,14 @@ void DomoticSystem::addDevice(std::unique_ptr<DomoticDevice> device)
 class idIsPresent
 {
     std::size_t ID;
-    public:
-        idIsPresent(std::size_t id) : ID{id} {}
 
-        bool operator()(std::unique_ptr<DomoticDevice> device) const
-        {
-            return device->getId() == ID;
-        }
+public:
+    idIsPresent(std::size_t id) : ID{id} {}
+
+    bool operator()(std::unique_ptr<DomoticDevice> device) const
+    {
+        return device->getId() == ID;
+    }
 };
 
 // Rimuove un dispositivo dalla lista tramite il suo ID.
@@ -155,11 +157,11 @@ void DomoticSystem::removeDevice(std::size_t id)
 }
 
 // Esegue un comando dato come input.
-void DomoticSystem::executeCommand(const std::string &input) 
-{   
+void DomoticSystem::executeCommand(const std::string &input)
+{
     std::istringstream stream(input);
     std::string command;
-    std::getline(stream, command, ' '); // 
+    std::getline(stream, command, ' '); //
 
     std::vector<std::string> params;
 }
@@ -167,7 +169,7 @@ void DomoticSystem::executeCommand(const std::string &input)
 // Registra un evento in un log.
 void DomoticSystem::logEvent(const std::string &event) const
 {
-    constexpr const char* fileName = "log.txt";
+    constexpr const char *fileName = "log.txt";
     std::ofstream logFile(fileName, std::ios_base::app);
 
     if (!logFile.is_open())
@@ -179,31 +181,36 @@ void DomoticSystem::logEvent(const std::string &event) const
 // COMANDI PER IL DEBUG
 
 // Resetta il tempo del sistema.
-void DomoticSystem::resetTime(void) 
+void DomoticSystem::resetTime(void)
 {
     storedTime_.resetTime();
 }
 
 // Rimuove i timer di tutti i dispositivi.
-void DomoticSystem::resetTimers(void) {
-    for (const auto &device : devices_) {
+void DomoticSystem::resetTimers(void)
+{
+    for (const auto &device : devices_)
+    {
         // Rimuove i timer dei device FixedCycle.
-        if (auto fixedDevice = dynamic_cast<FixedCycleDevice*>(device.get()))
+        if (auto fixedDevice = dynamic_cast<FixedCycleDevice *>(device.get()))
             fixedDevice->stopCycle();
-        
+
         // Setta offTime_ a NULL per i device non FixedCycle.
-        else {
+        else
+        {
             if (device->getOffTime() != Time(-1, -1))
                 device->setOffTime(Time(-1, -1));
-        }      
+        }
     }
 }
 
 // Riporta il sistema alle condizioni iniziali.
-std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_) {
+std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_)
+{
     double totalSystemEnergyConsumption = 0.0;
 
-    for (const auto &device : devices_) {
+    for (const auto &device : devices_)
+    {
         // Usa l'overload di << per DomoticDevice
         os << *device << "\n";
 
