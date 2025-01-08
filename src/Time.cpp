@@ -1,5 +1,6 @@
 // @author Alessio Modonesi
 
+#include <iostream>
 #include "Time.h"
 
 // Costruttore
@@ -33,8 +34,8 @@ Time Time::formattingTime(const Time &startTime, const int cycleDuration)
     int h = (int)cycleDuration / 60;
     int m = cycleDuration - (h * 60);
 
-    h += Time::startTime.hour_();
-    m += Time::startTime.minutes_();
+    h += startTime.getHours();
+    m += startTime.getMinutes();
 
     if (m > 59)
     {
@@ -42,7 +43,7 @@ Time Time::formattingTime(const Time &startTime, const int cycleDuration)
         m -= 60;
     }
 
-    return new Time(h, m);
+    return Time(h, m);
 }
 
 // HELPER FUNCTION
@@ -54,7 +55,7 @@ Time operator-(const Time &a, const Time &b)
     int min = minB - minA;
     int h = (int)min / 60;
     int m = min - (h * 60);
-    return new Time(h, m);
+    return Time(h, m);
 }
 
 bool operator==(const Time &a, const Time &b)
