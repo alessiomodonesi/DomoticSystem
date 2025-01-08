@@ -1,5 +1,7 @@
 // @author Tommaso Silvestrin
 
+#include <sstream>
+
 #include "DomoticSystem.h"
 #include "FixedCycleDevice.h"
 
@@ -43,7 +45,9 @@ void DomoticSystem::initializeCommands(void)
             // DomoticDevice::setTimer()
         }
         else
-        // log errore
+        {
+            // log errore
+        }
     };
 
     commands_["rm"] = [this](const std::vector<std::string> &params)
@@ -55,7 +59,9 @@ void DomoticSystem::initializeCommands(void)
             // log
         }
         else
-        // log errore
+        {
+            // log errore
+        }
     };
 
     commands_["show"] = [this](const std::vector<std::string> &params)
@@ -79,7 +85,9 @@ void DomoticSystem::initializeCommands(void)
                 // log
             }
             else
-            // log errore
+            {
+                // log errore
+            }
         }
         else
         {
