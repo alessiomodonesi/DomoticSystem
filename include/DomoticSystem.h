@@ -17,55 +17,55 @@
 // Collega tutti i dispositivi e controlla il consumo totale per evitare sovraccarichi.
 class DomoticSystem
 {
-    private:
-        std::vector<std::unique_ptr<DomoticDevice>> devices_;                                               // Lista di dispositivi gestiti dal sistema
-        std::unordered_map<std::string, std::function<void(const std::vector<std::string>&)>> commands_;    // Lista comandi disponibili per l'interfaccia utente
-        double maxPowerConsumption_;                                                                        // Potenza massima consentita (kW)
-        static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5;                                            // Potenza massima consentita di default
-        double totalSystemEnergyConsumption_;                                                               // Consumo energetico totale del sistema dalle 00:00
-        Time storedTime_;                                                                                   // Tempo del sistema
+private:
+    std::vector<std::unique_ptr<DomoticDevice>> devices_;                                             // Lista di dispositivi gestiti dal sistema
+    std::unordered_map<std::string, std::function<void(const std::vector<std::string> &)>> commands_; // Lista comandi disponibili per l'interfaccia utente
+    double maxPowerConsumption_;                                                                      // Potenza massima consentita (kW)
+    static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5;                                          // Potenza massima consentita di default
+    double totalSystemEnergyConsumption_;                                                             // Consumo energetico totale del sistema dalle 00:00
+    Time storedTime_;                                                                                 // Tempo del sistema
 
-        // Inizializza i comandi presenti nell'interfaccia utente
-        void initializeCommands(void);
-        
-        // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
-        double calculateCurrentConsumption(void) const;
-    
-        // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
-        void handleOverConsumption(void);
+    // Inizializza i comandi presenti nell'interfaccia utente
+    void initializeCommands(void);
 
-    public:
-        // Costruttore: inizializza il sistema con un limite massimo di potenza.
-        DomoticSystem(double powerConsumption = DEFAULT_POWER_CONSUMPTION);
+    // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
+    double calculateCurrentConsumption(void) const;
 
-        // Aggiunge un dispositivo alla lista gestita.
-        void addDevice(std::unique_ptr<DomoticDevice> device);
+    // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
+    void handleOverConsumption(void);
 
-        // Rimuove un dispositivo dalla lista tramite il suo ID.
-        void removeDevice(std::size_t id);
+public:
+    // Costruttore: inizializza il sistema con un limite massimo di potenza.
+    DomoticSystem(double powerConsumption = DEFAULT_POWER_CONSUMPTION);
 
-        // Esegue un comando dato come input.
-        void executeCommand(const std::string &input);
+    // Aggiunge un dispositivo alla lista gestita.
+    void addDevice(std::unique_ptr<DomoticDevice> device);
 
-        // Registra un evento in un log.
-        void logEvent(const std::string &event) const;
+    // Rimuove un dispositivo dalla lista tramite il suo ID.
+    void removeDevice(std::size_t id);
 
-        // COMANDI PER IL DEBUG:
+    // Esegue un comando dato come input.
+    void executeCommand(const std::string &input);
 
-        // Resetta il tempo del sistema.
-        void resetTime(void);
+    // Registra un evento in un log.
+    void logEvent(const std::string &event) const;
 
-        // Rimuove i timer di tutti i dispositivi.
-        void resetTimers(void);
+    // COMANDI PER IL DEBUG:
 
-        // Riporta il sistema alle condizioni iniziali.
-        void resetAll(void);
+    // Resetta il tempo del sistema.
+    void resetTime(void);
 
-        // Getter per totalSystemEnergyConsumption_
-        double getTotalSystemEnergyConsumption(void) const { return totalSystemEnergyConsumption_; }
+    // Rimuove i timer di tutti i dispositivi.
+    void resetTimers(void);
 
-        // Mostra la lista di tutti i dispositivi.
-        friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> devices_);
+    // Riporta il sistema alle condizioni iniziali.
+    void resetAll(void);
+
+    // Getter per totalSystemEnergyConsumption_
+    double getTotalSystemEnergyConsumption(void) const { return totalSystemEnergyConsumption_; }
+
+    // Mostra la lista di tutti i dispositivi.
+    friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> devices_);
 };
 
 #endif // DOMOTICSYSTEM_H
