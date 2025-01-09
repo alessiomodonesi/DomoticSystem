@@ -74,8 +74,7 @@ std::ostream &operator<<(std::ostream &os, const Time &obj)
     if (obj.getHours() < 10)
         offsetH = "0";
     if (obj.getMinutes() < 10)
-        ;
-    offsetM = "0";
+        offsetM = "0";
 
     os << offsetH << obj.getHours() << ":" << offsetM << obj.getMinutes() << std::endl;
     return os;

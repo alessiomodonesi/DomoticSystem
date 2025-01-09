@@ -5,36 +5,47 @@
 
 // Costruttore: inizializza il dispositivo con un ID, un nome e un valore di consumo energetico.
 DomoticDevice::DomoticDevice(const std::string &name, double powerConsumption)
-    : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption), totalEnergyConsumption_(0) {}
+    : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption), dailyConsumption_(0) {}
 
 // Metodo per accendere il dispositivo.
-void DomoticDevice::turnOn()
+void DomoticDevice::turnOn(const Time &offTime)
 {
-    if (!isOn_)
-        isOn_ = true;
+    if (!this->isOn_)
+        this->isOn_ = true;
+
+    this->setTimer(this->getStoredTime(), offTime);
 }
 
 // Metodo per spegnere il dispositivo.
 void DomoticDevice::turnOff()
 {
-    if (isOn_)
-        isOn_ = false;
+    if (this->isOn_)
+        this->isOn_ = false;
+
+    this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
+    this->setTimer(Time(-1, -1), Time(-1, -1));
 }
 
 // Imposta l’orario di accensione e spegnimento per il dispositivo.
 void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
 {
-    setStartTime(startTime);
-    setOffTime(offTime);
+    this->startTime_ = startTime;
+    this->offTime_ = offTime;
 }
 
 // Calcola il consumo energetico in base alle ore di funzionamento.
-double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Time &offTime)
+double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Time &offTime) const
 {
     Time intervals = offTime - startTime;
-    double useTime = intervals.getHours() + (intervals.getMinutes() / 60);
-    totalEnergyConsumption_ += powerConsumption_ * useTime;
-    return powerConsumption_ * useTime;
+    double usedTime = intervals.getHours() + (intervals.getMinutes() / 60);
+    return this->powerConsumption_ * usedTime;
+}
+
+// Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
+double DomoticDevice::showCurrentEnergyConsumption(const Time &startTime) const
+{
+    double usedTime = this->getStoredTime().getHours() + (this->getStoredTime().getMinutes() / 60);
+    return this->powerConsumption_ * usedTime;
 }
 
 // Distruttore virtuale per supportare l'ereditarietà.
@@ -46,7 +57,7 @@ std::ostream &operator<<(std::ostream &os, const DomoticDevice &device)
     os << "ID: " << device.getId()
        << "\nName: " << device.getName()
        << "\nStatus: " << (device.isDeviceOn() ? "Acceso" : "Spento")
-       << "\nEnergyConsumption: " << device.calculateEnergyConsumption(device.getStartTime(), device.getOffTime()) << " kW\n"
-       << "\nTotalEnergyConsumption: " << device.getTotalEnergyConsumption() << " kW\n";
+       << "\nPower Consumption: " << device.getPowerConsumption() << " kW"
+       << "\nDaily Energy Consumption: " << device.getDailyConsumption() << " kW\n";
     return os;
 }
