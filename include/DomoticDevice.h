@@ -3,15 +3,12 @@
 #ifndef DOMOTICDEVICE_H
 #define DOMOTICDEVICE_H
 
-#include "DomoticSystem.h"
-
-// Dichiarazione anticipata della classe DomoticSystem
-class DomoticSystem;
+#include <iostream>
 
 // Classe base per rappresentare un dispositivo domotico generico.
 // Questa classe offre funzionalità comuni come accensione/spegnimento,
 // gestione timer, e calcolo del consumo energetico.
-class DomoticDevice : public DomoticSystem
+class DomoticDevice
 {
 protected:
     const std::size_t id_;          // ID univoco del dispositivo

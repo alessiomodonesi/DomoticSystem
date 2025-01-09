@@ -33,4 +33,7 @@ bool operator==(const Time &a, const Time &b);
 bool operator!=(const Time &a, const Time &b);
 std::ostream &operator<<(std::ostringstream &os, const Time &obj);
 
+// Orario corrente del sistema
+extern Time NOW;
+
 #endif // TIME_H

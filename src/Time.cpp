@@ -79,3 +79,6 @@ std::ostream &operator<<(std::ostream &os, const Time &obj)
     os << offsetH << obj.getHours() << ":" << offsetM << obj.getMinutes() << std::endl;
     return os;
 }
+
+// Orario corrente del sistema
+Time NOW;

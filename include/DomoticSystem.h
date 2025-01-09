@@ -19,12 +19,11 @@ class DomoticDevice;
 // Collega tutti i dispositivi e controlla il consumo totale per evitare sovraccarichi.
 class DomoticSystem
 {
-protected:
+private:
     std::vector<std::unique_ptr<DomoticDevice>> devices_;                                             // Lista di dispositivi gestiti dal sistema
     std::unordered_map<std::string, std::function<void(const std::vector<std::string> &)>> commands_; // Lista comandi disponibili per l'interfaccia utente
     double maxPowerConsumption_;                                                                      // Potenza massima consentita (kW)
     double dailySystemConsumption_;                                                                   // Consumo energetico totale del sistema dalle 00:00
-    Time storedTime_;                                                                                 // Tempo accumulato dal sistema (now - 00:00)
     static constexpr double DEFAULT_POWER_CONSUMPTION = 3.5;                                          // Potenza massima consentita di default
 
     // Inizializza i comandi presenti nell'interfaccia utente
@@ -65,7 +64,6 @@ public:
 
     // Getter per dailySystemConsumption_ e storedTime_
     double getDailySystemConsumption(void) const { return dailySystemConsumption_; }
-    Time getStoredTime(void) const { return storedTime_; }
 
     // Mostra la lista di tutti i dispositivi.
     friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> devices_);

@@ -12,7 +12,7 @@ void FixedCycleDevice::turnOn(void)
     if (!this->isOn_)
         this->isOn_ = true;
 
-    this->setTimer(this->getStoredTime());
+    this->setTimer(NOW);
 }
 
 // Setta l'offTime del device di tipo FixedCycle con l'ausilio della struct Time

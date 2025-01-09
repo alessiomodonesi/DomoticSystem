@@ -13,7 +13,7 @@ void DomoticDevice::turnOn(void)
     if (!this->isOn_)
         this->isOn_ = true;
 
-    this->setTimer(this->getStoredTime(), this->offTime_);
+    this->setTimer(NOW, this->offTime_);
 }
 
 // Metodo per spegnere il dispositivo.
@@ -44,7 +44,7 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
 // Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
 double DomoticDevice::showCurrentEnergyConsumption(const Time &startTime) const
 {
-    double usedTime = this->getStoredTime().getHours() + (this->getStoredTime().getMinutes() / 60);
+    double usedTime = NOW.getHours() + (NOW.getMinutes() / 60);
     return this->powerConsumption_ * usedTime;
 }
 
