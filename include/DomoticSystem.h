@@ -10,8 +10,10 @@
 #include <memory>
 #include <fstream>
 
-#include "DomoticDevice.h"
 #include "Time.h"
+
+// Dichiarazione anticipata della classe DomoticDevice
+class DomoticDevice;
 
 // Classe per gestire l'intero sistema domotico.
 // Collega tutti i dispositivi e controlla il consumo totale per evitare sovraccarichi.

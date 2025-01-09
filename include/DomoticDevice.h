@@ -5,6 +5,9 @@
 
 #include "DomoticSystem.h"
 
+// Dichiarazione anticipata della classe DomoticSystem
+class DomoticSystem;
+
 // Classe base per rappresentare un dispositivo domotico generico.
 // Questa classe offre funzionalità comuni come accensione/spegnimento,
 // gestione timer, e calcolo del consumo energetico.
