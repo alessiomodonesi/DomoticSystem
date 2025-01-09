@@ -15,6 +15,73 @@ DomoticSystem::DomoticSystem(double powerConsumption)
     initializeCommands();
 }
 
+// Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
+double DomoticSystem::calculateCurrentConsumption(void) const
+{
+    double totalConsumption = 0;
+    for (const auto &device : this->devices_)
+    {
+        if (device->isDeviceOn())
+            totalConsumption += device->getPowerConsumption();
+    }
+    return totalConsumption;
+}
+
+// Function object per il predicato del find_if nel metodo successivo
+class overConsumption
+{
+public:
+    bool operator()(const std::unique_ptr<DomoticDevice> &device) const
+    {
+        return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
+    }
+};
+
+// Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
+void DomoticSystem::handleOverConsumption(void)
+{
+    while (calculateCurrentConsumption() > this->maxPowerConsumption_)
+    {
+        auto it = std::find_if(this->devices_.rbegin(), this->devices_.rend(), overConsumption());
+        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
+
+        if (it != this->devices_.rend())
+            (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
+        else
+            throw std::runtime_error("Overconsumption cannot be resolved: all devices are off.");
+    }
+}
+
+// Aggiunge un dispositivo alla lista gestita.
+void DomoticSystem::addDevice(std::unique_ptr<DomoticDevice> device)
+{
+    this->devices_.push_back(std::move(device));
+}
+
+// function object predicato per il find_if nel metodo successivo
+class idIsPresent
+{
+    std::size_t ID;
+
+public:
+    idIsPresent(std::size_t id) : ID{id} {}
+
+    bool operator()(std::unique_ptr<DomoticDevice> &device) const
+    {
+        return device->getId() == ID;
+    }
+};
+
+// Rimuove un dispositivo dalla lista tramite il suo ID.
+void DomoticSystem::removeDevice(std::size_t id)
+{
+    auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(id));
+    if (it != this->devices_.end())
+        this->devices_.erase(it);
+    else
+        throw std::runtime_error("device not found");
+}
+
 // Inizializza i comandi presenti nell'interfaccia utente.
 void DomoticSystem::initializeCommands(void)
 {
@@ -116,73 +183,6 @@ void DomoticSystem::initializeCommands(void)
             // log
         }
     };
-}
-
-// Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
-double DomoticSystem::calculateCurrentConsumption(void) const
-{
-    double totalConsumption = 0;
-    for (const auto &device : this->devices_)
-    {
-        if (device->isDeviceOn())
-            totalConsumption += device->getPowerConsumption();
-    }
-    return totalConsumption;
-}
-
-// Function object per il predicato del find_if nel metodo successivo
-class overConsumption
-{
-public:
-    bool operator()(const std::unique_ptr<DomoticDevice> &device) const
-    {
-        return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
-    }
-};
-
-// Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
-void DomoticSystem::handleOverConsumption(void)
-{
-    while (calculateCurrentConsumption() > this->maxPowerConsumption_)
-    {
-        auto it = std::find_if(this->devices_.rbegin(), this->devices_.rend(), overConsumption());
-        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
-
-        if (it != this->devices_.rend())
-            (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
-        else
-            throw std::runtime_error("Overconsumption cannot be resolved: all devices are off.");
-    }
-}
-
-// Aggiunge un dispositivo alla lista gestita.
-void DomoticSystem::addDevice(std::unique_ptr<DomoticDevice> device)
-{
-    this->devices_.push_back(std::move(device));
-}
-
-// function object predicato per il find_if nel metodo successivo
-class idIsPresent
-{
-    std::size_t ID;
-
-public:
-    idIsPresent(std::size_t id) : ID{id} {}
-
-    bool operator()(std::unique_ptr<DomoticDevice> device) const
-    {
-        return device->getId() == ID;
-    }
-};
-
-// Rimuove un dispositivo dalla lista tramite il suo ID.
-void DomoticSystem::removeDevice(std::size_t id)
-{
-    auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(id));
-    if (it != this->devices_.end())
-        this->devices_.erase(it);
-    else
-        throw std::runtime_error("device not found");
 }
 
 // Esegue un comando dato come input.
