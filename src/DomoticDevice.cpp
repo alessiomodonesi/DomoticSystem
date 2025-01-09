@@ -8,12 +8,12 @@ DomoticDevice::DomoticDevice(const std::string &name, double powerConsumption)
     : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption), dailyConsumption_(0) {}
 
 // Metodo per accendere il dispositivo.
-void DomoticDevice::turnOn(const Time &offTime)
+void DomoticDevice::turnOn(void)
 {
     if (!this->isOn_)
         this->isOn_ = true;
 
-    this->setTimer(this->getStoredTime(), offTime);
+    this->setTimer(this->getStoredTime(), this->offTime_);
 }
 
 // Metodo per spegnere il dispositivo.
