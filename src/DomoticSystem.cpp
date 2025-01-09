@@ -232,7 +232,7 @@ void DomoticSystem::logEvent(const std::string &event) const
 // Resetta il tempo del sistema.
 void DomoticSystem::resetTime(void)
 {
-    this->storedTime_.resetTime();
+    this->storedTime_ = Time(0, 0);
 }
 
 // Rimuove i timer di tutti i dispositivi.
@@ -251,6 +251,16 @@ void DomoticSystem::resetTimers(void)
                 device->setOffTime(Time(-1, -1));
         }
     }
+}
+
+// Riporta il sistema alle condizioni iniziali.
+void DomoticSystem::resetAll(void)
+{
+    this->resetTime();
+    this->resetTimers();
+
+    for (const auto &device : this->devices_)
+        device->turnOff();
 }
 
 // Riporta il sistema alle condizioni iniziali.

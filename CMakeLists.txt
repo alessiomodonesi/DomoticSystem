@@ -4,6 +4,7 @@ project(Domotica)
 include_directories(include)
 add_library(
     ${PROJECT_NAME} SHARED
+    src/Time.cpp
     src/DomoticSystem.cpp
     src/DomoticDevice.cpp
     src/FixedCycleDevice.cpp
