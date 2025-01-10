@@ -107,10 +107,7 @@ void DomoticSystem::initializeCommands(void)
         if (params.size() == 2)
         {
             if (params[0] == "time") // set time ${TIME}, va a una specifica ora del giorno.
-            {
-                // parse params[1], dovrebbe essere in formato HH:MM secondo l'esempio del prof
-                // storedTime_.setTime(hours, minutes);
-            }
+                NOW.setTime(Time::toTime(params[0]).getHours(), Time::toTime(params[0]).getMinutes());
             else
             {
                 auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
