@@ -81,7 +81,7 @@ Time Time::toTime(const std::string &time) // Time deve essere in formato HH:MM
 {
     // Verifica se l'input è un orario valido
     if (!Time::isTime(time))
-        throw std::invalid_argument("Formato orario non valido: " + time);
+        throw std::invalid_argument("Invalid time format: " + time);
 
     // Estrae le ore e i minuti
     int h = std::stoi(time.substr(0, 2));

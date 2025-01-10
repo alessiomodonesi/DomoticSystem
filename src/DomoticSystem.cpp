@@ -107,7 +107,7 @@ void DomoticSystem::initializeCommands(void)
         if (params.size() == 2)
         {
             if (params[0] == "time") // set time ${TIME}, va a una specifica ora del giorno.
-                NOW.setTime(Time::toTime(params[0]).getHours(), Time::toTime(params[0]).getMinutes());
+                NOW.setTime(Time::toTime(params[1]).getHours(), Time::toTime(params[1]).getMinutes());
             else
             {
                 auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
@@ -267,11 +267,11 @@ void DomoticSystem::executeCommand(const std::string &input)
         }
         catch (const std::exception &e)
         {
-            std::cerr << "Errore durante l'esecuzione del comando: " << e.what() << std::endl;
+            std::cerr << "Error during comand execution: " << e.what() << std::endl;
         }
     }
     else // Comando non trovato
-        std::cerr << "Comando non valido: " << command << std::endl;
+        std::cerr << "Invalid command: " << command << std::endl;
 }
 
 // Registra un evento in un log.
