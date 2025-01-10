@@ -48,7 +48,7 @@ void DomoticSystem::handleOverConsumption(void)
         if (it != this->devices_.rend())
             (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
         else
-            std::cerr << "L'overconsumption non può essere risolta: tutti i dispositivi sono spenti." << std::endl;
+            std::cerr << "L'overconsumption non può essere risolta: tutti i dispositivi sono spenti" << std::endl;
     }
 }
 
@@ -96,7 +96,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<Dom
             dailySystemConsumption += device->getDailyConsumption(); // Somma il consumo energetico
     }
 
-    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemProduction << " kWh. \n"
+    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemProduction << " kWh\n"
        << "Nello specifico:" << "\n\n";
 
     for (const auto &device : devices_)
@@ -113,23 +113,56 @@ void DomoticSystem::initializeCommands(void)
         {
             if (params[0] == "time") // set time ${TIME}, va a una specifica ora del giorno.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
-                for (int h = NOW.getHours(); h <= Time::toTime(params[1]).getHours(); ++h)
+                // Converte l'orario fornito in un oggetto Time.
+                Time targetTime = Time::toTime(params[1]);
+
+                // Controlla se l'orario fornito è successivo all'orario attuale.
+                if (targetTime > NOW)
                 {
-                    int startMinute = (h == NOW.getHours()) ? NOW.getMinutes() : 0;
-                    int endMinute = (h == Time::toTime(params[1]).getHours()) ? Time::toTime(params[1]).getMinutes() : 59;
+                    std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
 
-                    for (int m = startMinute; m <= endMinute; ++m)
+                    for (int h = NOW.getHours(); h <= targetTime.getHours(); ++h)
                     {
-                        NOW.setTime(h, m); // Aggiorna l'orario
+                        int startMinute = (h == NOW.getHours()) ? NOW.getMinutes() : 0;
+                        int endMinute = (h == targetTime.getHours()) ? targetTime.getMinutes() : 59;
 
-                        if (!(h == NOW.getHours() && m == startMinute)) // Salta la stampa "Log accensioni" per il primo minuto
-                            std::cout << "[" << NOW << "] Log accensioni e spegnimenti" << std::endl;
+                        for (int m = startMinute; m <= endMinute; ++m)
+                        {
+                            NOW.setTime(h, m); // Aggiorna l'orario.
 
-                        if (h == Time::toTime(params[1]).getHours() && m == endMinute) // Stampa finale alla fine del ciclo
-                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                            // Controlla lo stato di ogni dispositivo e aggiorna in base all'orario corrente
+                            for (const auto &device : devices_)
+                            {
+                                // Controlla se il dispositivo è acceso
+                                if (device->isDeviceOn())
+                                {
+                                    // Spegni il dispositivo se l'orario attuale corrisponde a "offTime"
+                                    if (device->getOffTime().getHours() == h && device->getOffTime().getMinutes() == m)
+                                    {
+                                        device->turnOff();
+                                        std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
+                                    }
+                                }
+                                else
+                                {
+                                    // Accendi il dispositivo se l'orario attuale corrisponde a "startTime"
+                                    if (device->getStartTime().getHours() == h && device->getStartTime().getMinutes() == m)
+                                    {
+                                        device->turnOn();
+                                        std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                                    }
+                                }
+                            }
+
+                            // Stampa finale alla fine del ciclo per l'ultimo minuto
+                            if (h == targetTime.getHours() && m == endMinute)
+                                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                        }
                     }
                 }
+                else
+                    std::cerr << "[" << NOW << "] Errore: l'orario " << targetTime
+                              << " non è successivo all'orario attuale" << std::endl;
             }
             else
             {
@@ -228,11 +261,11 @@ void DomoticSystem::initializeCommands(void)
                 DomoticDevice *device = it->get();
 
                 if (device->getPowerConsumption() > 0)
-                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente prodotto "
-                              << device->getDailyConsumption() << std::endl;
+                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " oggi ha prodotto "
+                              << device->getDailyConsumption() << " kWh" << std::endl;
                 else
-                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente consumato "
-                              << device->getDailyConsumption() << std::endl;
+                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " oggi ha consumato "
+                              << device->getDailyConsumption() << " kWh" << std::endl;
             }
             else
                 std::cerr << "Dispositivo non trovato" << std::endl;
