@@ -205,7 +205,7 @@ void DomoticSystem::initializeCommands(void)
             {
                 std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                 DomoticDevice *device = it->get();
-                std::cout << device->showCurrentEnergyConsumption(device->getStartTime()) << std::endl;
+                device->showCurrentEnergyConsumption(std::cout, *device);
             }
             else
                 std::cerr << "Device not found" << std::endl;
