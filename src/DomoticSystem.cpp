@@ -258,9 +258,7 @@ void DomoticSystem::executeCommand(const std::string &input)
     if (it != commands_.end()) // Se il comando è trovato, chiama la funzione associata con i parametri estratti.
         it->second(params);    // Esegue il comportamento del comando.
     else
-    {
-        // Comando non trovato.
-    }
+        std::cerr << "Invalid command" << std::endl;
 }
 
 // Registra un evento in un log.
