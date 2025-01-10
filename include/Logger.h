@@ -8,7 +8,7 @@
 
 struct Logger
 {
-    // Possiamo definire diversi livelli per differenziare semplici informazioni ed errori
+    // Possiamo definire diversi livelli per differenziare semplici informazioni ed errori.
     enum class Level
     {
         INFO,
@@ -17,13 +17,11 @@ struct Logger
     };
 
     explicit Logger(const std::string &outputPath);
-    ~Logger();
-
     void log(const Level level = Level::INFO, const std::string &message);
+    ~Logger();
 
 private:
     std::ofstream logFile_;
-
     std::string levelToString(Level level);
 };
 
