@@ -31,7 +31,7 @@ int main()
     std::string input;
     while (true)
     {
-        std::cout << "Inserisci un comando: ";
+        std::cout << ">> ";
         std::getline(std::cin, input);
         system.executeCommand(input);
     }
