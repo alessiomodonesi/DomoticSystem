@@ -82,6 +82,23 @@ void DomoticSystem::removeDevice(std::size_t id)
         throw std::runtime_error("device not found");
 }
 
+// Riporta il sistema alle condizioni iniziali.
+std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_)
+{
+    double dailySystemConsumption = 0.0;
+    for (const auto &device : devices_)
+    {
+        // Usa l'overload di << per DomoticDevice
+        os << *device << "\n";
+
+        // Somma il consumo energetico
+        dailySystemConsumption += device->getDailyConsumption();
+    }
+
+    os << "\nTotal System Energy Consumption: " << dailySystemConsumption << " kW\n";
+    return os;
+}
+
 // Inizializza i comandi presenti nell'interfaccia utente.
 void DomoticSystem::initializeCommands(void)
 {
@@ -304,21 +321,4 @@ void DomoticSystem::resetAll(void)
 
     for (const auto &device : this->devices_)
         device->turnOff();
-}
-
-// Riporta il sistema alle condizioni iniziali.
-std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_)
-{
-    double dailySystemConsumption = 0.0;
-    for (const auto &device : devices_)
-    {
-        // Usa l'overload di << per DomoticDevice
-        os << *device << "\n";
-
-        // Somma il consumo energetico
-        dailySystemConsumption += device->getDailyConsumption();
-    }
-
-    os << "\nTotal System Energy Consumption: " << dailySystemConsumption << " kW\n";
-    return os;
 }
