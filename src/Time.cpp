@@ -61,14 +61,29 @@ Time Time::calculateOffTime(const Time &startTime, const int cycleDuration)
 // Controlla la formattazione di un orario.
 bool Time::isTime(const std::string &time) // Time deve essere in formato HH:MM
 {
-    int h = std::stoi(time.substr(0, 2));
-    int m = std::stoi(time.substr(3, 2));
-    return (h >= 0 && h <= 23) && (m >= 0 && m <= 59);
+    if (time.size() != 5 || time[2] != ':') // Controlla la lunghezza e il separatore
+        return false;
+
+    try
+    {
+        int h = std::stoi(time.substr(0, 2));
+        int m = std::stoi(time.substr(3, 2));
+        return (h >= 0 && h <= 23) && (m >= 0 && m <= 59);
+    }
+    catch (const std::exception &)
+    {
+        return false; // Restituisce false se std::stoi fallisce
+    }
 }
 
 // Restituisce un orario formattato.
 Time Time::toTime(const std::string &time) // Time deve essere in formato HH:MM
 {
+    // Verifica se l'input è un orario valido
+    if (!Time::isTime(time))
+        throw std::invalid_argument("Formato orario non valido: " + time);
+
+    // Estrae le ore e i minuti
     int h = std::stoi(time.substr(0, 2));
     int m = std::stoi(time.substr(3, 2));
     return Time(h, m);
