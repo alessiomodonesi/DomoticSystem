@@ -7,9 +7,6 @@
 
 int main()
 {
-    // Inizializzazione dell'orario di sistema
-    Time::NOW = {0, 0};
-
     // Creazione del sistema domotico
     DomoticSystem system(3.5); // 3.5 kW come soglia di potenza massima
 
@@ -30,10 +27,15 @@ int main()
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Asciugatrice", -0.5, 60)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisore", -0.2, 60)));
 
-    // Eseguire un comando.
-    std::string input = "";
-    std::cout << "Inserisci un comando: ";
-    std::cin >> input;
-    system.executeCommand(input);
+    // Creazione dell'input per l'utente
+    std::string input;
+
+    do
+    {
+        std::cout << "Inserisci un comando: ";
+        std::cin >> input;
+        system.executeCommand(input);
+    } while (input != "exit");
+
     return 0;
 }
