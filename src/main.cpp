@@ -29,13 +29,12 @@ int main()
 
     // Creazione dell'input per l'utente
     std::string input;
-
-    do
+    while (true)
     {
         std::cout << "Inserisci un comando: ";
         std::cin >> input;
         system.executeCommand(input);
-    } while (input != "exit");
+    }
 
     return 0;
 }
