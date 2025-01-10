@@ -48,7 +48,7 @@ void DomoticSystem::handleOverConsumption(void)
         if (it != this->devices_.rend())
             (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
         else
-            throw std::runtime_error("Overconsumption cannot be resolved: all devices are off.");
+            std::cerr << "Overconsumption cannot be resolved: all devices are off." << std::endl;
     }
 }
 
@@ -79,7 +79,7 @@ void DomoticSystem::removeDevice(std::size_t id)
     if (it != this->devices_.end())
         this->devices_.erase(it);
     else
-        throw std::runtime_error("device not found");
+        std::cerr << "Device not found" << std::endl;
 }
 
 // Riporta il sistema alle condizioni iniziali.
@@ -126,12 +126,10 @@ void DomoticSystem::initializeCommands(void)
                             fixedDevice->setTimer(Time::toTime(params[1]));
                     }
                     else
-                    {
-                        // params[1] non è { "on", "off", Time }.
-                    }
+                        std::cerr << "Invalid command" << std::endl;
                 }
                 else
-                    throw std::runtime_error("device not found");
+                    std::cerr << "Device not found" << std::endl;
             }
         }
         else if (params.size() == 3) // set ${DEVICENAME} ${START} [${STOP}], imposta l’orario di accensione e spegnimento per un DomoticDevice.
@@ -143,14 +141,10 @@ void DomoticSystem::initializeCommands(void)
                 device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
             }
             else
-            {
-                // Device non trovato.
-            }
+                std::cerr << "Device not found" << std::endl;
         }
         else
-        {
-            // Parametri errati nel comando.
-        }
+            std::cerr << "Invalid command" << std::endl;
     };
 
     this->commands_["rm"] = [this](const std::vector<std::string> &params)
@@ -167,14 +161,10 @@ void DomoticSystem::initializeCommands(void)
                     device->setOffTime(Time(-1, -1));
             }
             else
-            {
-                // Device non trovato.
-            }
+                std::cerr << "Device not found" << std::endl;
         }
         else
-        {
-            // Parametri errati nel comando.
-        }
+            std::cerr << "Invalid command" << std::endl;
     };
 
     this->commands_["show"] = [this](const std::vector<std::string> &params)
@@ -190,14 +180,10 @@ void DomoticSystem::initializeCommands(void)
                 std::cout << device->showCurrentEnergyConsumption(device->getStartTime()) << std::endl;
             }
             else
-            {
-                // Device non trovato.
-            }
+                std::cerr << "Device not found" << std::endl;
         }
         else
-        {
-            // Parametri errati nel comando.
-        }
+            std::cerr << "Invalid command" << std::endl;
     };
 
     this->commands_["reset"] = [this](const std::vector<std::string> &params)
@@ -231,14 +217,10 @@ void DomoticSystem::initializeCommands(void)
                 resetTimers();
             }
             else
-            {
-                // Parametri errati nel comando.
-            }
+                std::cerr << "Invalid command" << std::endl;
         }
         else
-        {
-            // Parametri errati nel comando.
-        }
+            std::cerr << "Invalid command" << std::endl;
     };
 };
 
