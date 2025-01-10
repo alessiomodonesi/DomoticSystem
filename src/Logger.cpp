@@ -6,7 +6,7 @@
 
 #include "Logger.h"
 
-Logger::Logger(const std::string &outputPath) 
+Logger::Logger(const std::string &outputPath)
     : logFile_(outputPath, std::ios::app)
 {
     if (!logFile_.is_open())
@@ -14,23 +14,31 @@ Logger::Logger(const std::string &outputPath)
 }
 
 // Distruttore
-Logger::~Logger() {
+Logger::~Logger()
+{
     if (logFile_.is_open())
         logFile_.close();
 }
 
-void Logger::log(const Level level, const std::string &message) {
-    //std::string fullMessage = "[" + tempo + "] " + message;
-    //logFile << fullMessage << std::endl;
-}   
+void Logger::log(const Level level, const std::string &message)
+{
+    // std::string fullMessage = "[" + tempo + "] " + message;
+    // logFile << fullMessage << std::endl;
+}
 
-std::string Logger::levelToString(Level level) {
-    switch (level) {
-        case Level::INFO: return "INFO";
-        case Level::WARNING: return "ATTENZIONE";
-        case Level::ERROR: return "ERRORE";
-        default: return "SCONOSCIUTO";
+std::string Logger::levelToString(Level level)
+{
+    switch (level)
+    {
+    case Level::INFO:
+        return "INFO";
+    case Level::WARNING:
+        return "ATTENZIONE";
+    case Level::ERROR:
+        return "ERRORE";
+    default:
+        return "SCONOSCIUTO";
     }
 }
 
-Logger LOGGER("log.txt");
+Logger defaultLogger("log.txt");

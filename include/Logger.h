@@ -9,20 +9,25 @@
 struct Logger
 {
     // Possiamo definire diversi livelli per differenziare semplici informazioni ed errori
-    enum class Level { INFO, WARNING, ERROR };
+    enum class Level
+    {
+        INFO,
+        WARNING,
+        ERROR
+    };
 
     explicit Logger(const std::string &outputPath);
     ~Logger();
 
     void log(const Level level = Level::INFO, const std::string &message);
 
-    private:
-        std::ofstream logFile_;
+private:
+    std::ofstream logFile_;
 
-        std::string levelToString(Level level);
-}
+    std::string levelToString(Level level);
+};
 
 // Logger usato dal sistema
-extern Logger LOGGER;
+extern Logger defaultLogger;
 
 #endif // LOGGER_H
