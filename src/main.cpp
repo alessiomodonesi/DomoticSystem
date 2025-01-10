@@ -32,7 +32,7 @@ int main()
     while (true)
     {
         std::cout << "Inserisci un comando: ";
-        std::cin >> input;
+        std::getline(std::cin, input);
         system.executeCommand(input);
     }
 

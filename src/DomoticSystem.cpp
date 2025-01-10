@@ -231,38 +231,47 @@ void DomoticSystem::initializeCommands(void)
 // Esegue un comando dato come input.
 void DomoticSystem::executeCommand(const std::string &input)
 {
-    std::string copy = input;
+    std::string command;             // Comando principale (es. "set", "show")
+    std::vector<std::string> params; // Parametri del comando
 
-    // Trasforma tutti i caratteri della stringa `copy` in minuscolo.
-    std::transform(copy.begin(), copy.end(), copy.begin(), [](unsigned char c)
+    // Usa un istringstream per analizzare la stringa di input
+    std::istringstream stream(input);
+    stream >> command; // Legge la prima parola come comando
+
+    // Trasforma solo il comando in minuscolo
+    std::transform(command.begin(), command.end(), command.begin(), [](unsigned char c)
                    { return std::tolower(c); });
 
-    // Utilizza un `std::istringstream` per analizzare la stringa trasformata `copy`.
-    // Questo permette di dividere il comando principale dai suoi parametri.
-    std::istringstream stream(copy);
-    std::string command;
+    // Raccoglie i parametri rispettando stringhe tra virgolette
+    std::string param;
+    while (stream >> std::ws) // Ignora spazi iniziali
+    {
+        if (stream.peek() == '"') // Riconosce stringhe tra virgolette
+        {
+            stream.ignore();                  // Ignora il carattere "
+            std::getline(stream, param, '"'); // Legge fino alla chiusura delle virgolette
+        }
+        else
+            stream >> param; // Legge un parametro "normale"
 
-    // Estrae il primo termine della stringa (il comando) fino al primo spazio.
-    // Esempio: "set device1 on" -> command = "set"
-    std::getline(stream, command, ' ');
+        params.push_back(param); // Aggiunge il parametro al vettore
+    }
 
-    std::vector<std::string> params; // Vettore per memorizzare i parametri del comando.
-    std::string word;
-
-    // Estrae tutti i termini rimanenti nella stringa (i parametri) separati da spazi.
-    // Ogni parola successiva al comando principale viene aggiunta a `params`.
-    // Esempio: "set device1 on" -> params = ["device1", "on"]
-    while (std::getline(stream, word, ' '))
-        params.push_back(word);
-
-    // Cerca il comando nella mappa `commands_`, che associa comandi (stringhe)
-    // a funzioni (lambdas) che implementano il loro comportamento.
+    // Cerca il comando nella mappa commands_
     auto it = commands_.find(command);
-
-    if (it != commands_.end()) // Se il comando è trovato, chiama la funzione associata con i parametri estratti.
-        it->second(params);    // Esegue il comportamento del comando.
-    else
-        std::cerr << "Invalid command" << std::endl;
+    if (it != commands_.end()) // Comando trovato
+    {
+        try
+        {
+            it->second(params); // Esegue la funzione associata al comando
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Errore durante l'esecuzione del comando: " << e.what() << std::endl;
+        }
+    }
+    else // Comando non trovato
+        std::cerr << "Comando non valido: " << command << std::endl;
 }
 
 // Registra un evento in un log.
