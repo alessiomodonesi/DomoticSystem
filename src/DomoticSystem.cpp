@@ -222,6 +222,10 @@ void DomoticSystem::initializeCommands(void)
         else
             std::cerr << "Invalid command" << std::endl;
     };
+    this->commands_["clear"] = [this](const std::vector<std::string> &params)
+    { system("clear"); };
+    this->commands_["exit"] = [this](const std::vector<std::string> &params)
+    { exit(0); };
 };
 
 // Esegue un comando dato come input.
