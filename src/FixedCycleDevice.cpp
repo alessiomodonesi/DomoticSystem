@@ -19,7 +19,7 @@ void FixedCycleDevice::turnOn(void)
 void FixedCycleDevice::setTimer(const Time &startTime)
 {
     this->startTime_ = startTime;
-    setOffTime(Time::formattingTime(startTime, this->cycleDuration_));
+    setOffTime(Time::calculateOffTime(startTime, this->cycleDuration_));
 }
 
 // Interrompe manualmente un ciclo in corso.
