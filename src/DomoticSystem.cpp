@@ -136,7 +136,7 @@ void DomoticSystem::initializeCommands(void)
 
         this->commands_["rm"] = [this](const std::vector<std::string> &params)
         {
-            if (params.size() == 1)
+            if (params.size() == 1) // rm ${DEVICENAME}, rimuove il timer associato al dispositivo.
             {
                 auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
                 if (it != this->devices_.end()) // Se trovo il device.
@@ -160,34 +160,48 @@ void DomoticSystem::initializeCommands(void)
 
         this->commands_["show"] = [this](const std::vector<std::string> &params)
         {
-            // std::cout << *this;
-        };
-
-        this->commands_["reset"] = [this](const std::vector<std::string> &params)
-        {
-            if (params.size() > 0)
+            if (params.size() == 0) // show, mostra la lista di tutti i dispositivi con la produzione/consumo energetico di ciascuno e la produzione/consumo energetico totale del sistema dalle 00:00.
+                std::cout << this->devices_ << std::endl;
+            else if (params.size() == 1) // show ${DEVICENAME}, mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
             {
-                if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+                auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
+                if (it != this->devices_.end()) // Se trovo il device.
                 {
-                    resetTimers();
-                    // log
-                }
-
-                else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
-                {
-                    resetAll();
-                    // log
+                    DomoticDevice *device = it->get();
+                    std::cout << device->showCurrentEnergyConsumption(device->getStartTime()) << std::endl;
                 }
                 else
                 {
-                    // log errore
+                    // Troppi parametri nel comando.
                 }
-            }
-            else
+            };
+
+            this->commands_["reset"] = [this](const std::vector<std::string> &params)
             {
-                resetTime();
-                // log
-            }
+                if (params.size() > 0)
+                {
+                    if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+                    {
+                        resetTimers();
+                        // log
+                    }
+
+                    else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+                    {
+                        resetAll();
+                        // log
+                    }
+                    else
+                    {
+                        // log errore
+                    }
+                }
+                else
+                {
+                    resetTime();
+                    // log
+                }
+            };
         };
     };
 }
