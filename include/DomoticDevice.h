@@ -41,7 +41,7 @@ public:
     double calculateEnergyConsumption(const Time &startTime, const Time &offTime) const;
 
     // Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
-    double showCurrentEnergyConsumption(const Time &startTime) const;
+    std::ostream &showCurrentEnergyConsumption(std::ostream &os, const DomoticDevice &device);
 
     // Getter per ID, nome, potenza, stato ed orario e consumo energetico totale dalle 00:00.
     std::size_t getId(void) const { return id_; }

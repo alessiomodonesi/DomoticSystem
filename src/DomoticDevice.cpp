@@ -7,6 +7,9 @@
 DomoticDevice::DomoticDevice(const std::string &name, double powerConsumption)
     : id_(std::hash<std::string>{}(name)), name_(name), powerConsumption_(powerConsumption), dailyConsumption_(0) {}
 
+// Distruttore virtuale per supportare l'ereditarietà.
+DomoticDevice::~DomoticDevice() = default;
+
 // Metodo per accendere il dispositivo.
 void DomoticDevice::turnOn(void)
 {
@@ -42,14 +45,15 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
 }
 
 // Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
-double DomoticDevice::showCurrentEnergyConsumption(const Time &startTime) const
+std::ostream &showCurrentEnergyConsumption(std::ostream &os, const DomoticDevice &device)
 {
-    double usedTime = NOW.getHours() + (NOW.getMinutes() / 60);
-    return this->powerConsumption_ * usedTime;
-}
+    double startHour = device.getStartTime().getHours() + (device.getStartTime().getMinutes() / 60);
+    double nowHour = NOW.getHours() + (NOW.getMinutes() / 60);
+    double usedTime = nowHour - startHour;
 
-// Distruttore virtuale per supportare l'ereditarietà.
-DomoticDevice::~DomoticDevice() = default;
+    os << "[" << NOW << "] Il dispositivo " << device.getName() << " ha attualmente consumato " << device.getPowerConsumption() * usedTime << std::endl;
+    return os;
+}
 
 // Ritorna lo stato del dispositivo in formato leggibile.
 std::ostream &operator<<(std::ostream &os, const DomoticDevice &device)
