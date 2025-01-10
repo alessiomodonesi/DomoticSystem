@@ -136,15 +136,25 @@ void DomoticSystem::initializeCommands(void)
 
         this->commands_["rm"] = [this](const std::vector<std::string> &params)
         {
-            if (params.size() > 0)
+            if (params.size() == 1)
             {
-                // trova device e controlla che sia FixedCycleDevice
-                // FixedCycleDevice::stopCycle()
-                // log
+                auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
+                if (it != this->devices_.end()) // Se trovo il device.
+                {
+                    DomoticDevice *device = it->get();
+                    if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
+                        fixedDevice->stopCycle();
+                    else
+                        device->setOffTime(Time(-1, -1));
+                }
+                else
+                {
+                    // Device non trovato.
+                }
             }
             else
             {
-                // log errore
+                // Troppi parametri nel comando.
             }
         };
 
