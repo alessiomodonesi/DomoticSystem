@@ -1,18 +1,39 @@
+#include <iostream>
+#include <memory>
+
 #include "DomoticSystem.h"
+#include "DomoticDevice.h"
 #include "FixedCycleDevice.h"
 
 int main()
 {
-    DomoticSystem system;
+    // Inizializzazione dell'orario di sistema
+    Time::NOW = {0, 0};
 
-    // Creazione di dispositivi e aggiunta al sistema.
-    system.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Impianto fotovoltaico", +1.5)));
+    // Creazione del sistema domotico
+    DomoticSystem system(3.5); // 3.5 kW come soglia di potenza massima
+
+    // Creazione ed aggiunta dei dispositivi al sistema domotico:
+    // Impianto fotovoltaico
+    system.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Impianto fotovoltaico", 1.5)));
+
+    // Dispositivi manuali (M)
+    system.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Pompa di Calore", -2.0)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Scaldabagno", -1.0)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new DomoticDevice("Frigorifero", -0.4)));
+
+    // Dispositivi a ciclo prefissato (CP)
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Lavatrice", -2.0, 110)));
-
-    // Rimuovere un dispositivo.
-    system.removeDevice(std::hash<std::string>{}("Lavatrice"));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Lavastoviglie", -1.5, 195)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Tapparelle Elettriche", -0.3, 1)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Forno a Microonde", -0.8, 2)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Asciugatrice", -0.5, 60)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisore", -0.2, 60)));
 
     // Eseguire un comando.
-    system.executeCommand("set Impianto fotovoltaico on");
+    std::string input = "";
+    std::cout << "Inserisci un comando: ";
+    std::cin >> input;
+    system.executeCommand(input);
     return 0;
 }
