@@ -15,12 +15,21 @@ Time::Time(int h, int m)
 // Va a una specifica ora del giorno.
 void Time::setTime(int h, int m)
 {
+    // Considera -1, -1 come un orario nullo
+    if (h == -1 && m == -1)
+    {
+        hours_ = -1;
+        minutes_ = -1;
+        return;
+    }
+
+    // Controlla che ore e minuti siano validi
     if (h < 0 || h > 23)
         throw std::out_of_range("Le ore devono essere comprese tra 0 e 23.");
-
     if (m < 0 || m > 59)
         throw std::out_of_range("I minuti devono essere compresi tra 0 e 59.");
 
+    // Imposta ore e minuti
     hours_ = h;
     minutes_ = m;
 }
