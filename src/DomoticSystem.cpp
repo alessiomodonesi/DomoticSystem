@@ -132,79 +132,101 @@ void DomoticSystem::initializeCommands(void)
             {
                 // Device non trovato.
             }
-        };
-
-        this->commands_["rm"] = [this](const std::vector<std::string> &params)
+        }
+        else
         {
-            if (params.size() == 1) // rm ${DEVICENAME}, rimuove il timer associato al dispositivo.
+            // Parametri errati nel comando.
+        }
+    };
+
+    this->commands_["rm"] = [this](const std::vector<std::string> &params)
+    {
+        if (params.size() == 1) // rm ${DEVICENAME}, rimuove il timer associato al dispositivo.
+        {
+            auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
+            if (it != this->devices_.end()) // Se trovo il device.
             {
-                auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
-                if (it != this->devices_.end()) // Se trovo il device.
-                {
-                    DomoticDevice *device = it->get();
-                    if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
-                        fixedDevice->stopCycle();
-                    else
-                        device->setOffTime(Time(-1, -1));
-                }
+                DomoticDevice *device = it->get();
+                if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
+                    fixedDevice->stopCycle();
                 else
-                {
-                    // Device non trovato.
-                }
+                    device->setOffTime(Time(-1, -1));
             }
             else
             {
-                // Troppi parametri nel comando.
+                // Device non trovato.
             }
-        };
-
-        this->commands_["show"] = [this](const std::vector<std::string> &params)
+        }
+        else
         {
-            if (params.size() == 0) // show, mostra la lista di tutti i dispositivi con la produzione/consumo energetico di ciascuno e la produzione/consumo energetico totale del sistema dalle 00:00.
-                std::cout << this->devices_ << std::endl;
-            else if (params.size() == 1) // show ${DEVICENAME}, mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
-            {
-                auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
-                if (it != this->devices_.end()) // Se trovo il device.
-                {
-                    DomoticDevice *device = it->get();
-                    std::cout << device->showCurrentEnergyConsumption(device->getStartTime()) << std::endl;
-                }
-                else
-                {
-                    // Troppi parametri nel comando.
-                }
-            };
-
-            this->commands_["reset"] = [this](const std::vector<std::string> &params)
-            {
-                if (params.size() > 0)
-                {
-                    if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
-                    {
-                        resetTimers();
-                        // log
-                    }
-
-                    else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
-                    {
-                        resetAll();
-                        // log
-                    }
-                    else
-                    {
-                        // log errore
-                    }
-                }
-                else
-                {
-                    resetTime();
-                    // log
-                }
-            };
-        };
+            // Parametri errati nel comando.
+        }
     };
-}
+
+    this->commands_["show"] = [this](const std::vector<std::string> &params)
+    {
+        if (params.size() == 0) // show, mostra la lista di tutti i dispositivi con la produzione/consumo energetico di ciascuno e la produzione/consumo energetico totale del sistema dalle 00:00.
+            std::cout << this->devices_ << std::endl;
+        else if (params.size() == 1) // show ${DEVICENAME}, mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
+        {
+            auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
+            if (it != this->devices_.end()) // Se trovo il device.
+            {
+                DomoticDevice *device = it->get();
+                std::cout << device->showCurrentEnergyConsumption(device->getStartTime()) << std::endl;
+            }
+            else
+            {
+                // Device non trovato.
+            }
+        }
+        else
+        {
+            // Parametri errati nel comando.
+        }
+    };
+
+    this->commands_["reset"] = [this](const std::vector<std::string> &params)
+    {
+        if (params.size() == 1)
+        {
+            if (params[0] == "all")
+            {
+                /* reset all, riporta il sistema alle condizioni iniziali:
+                    l’orario viene impostato a 00:00,
+                    tutti i timer vengono rimossi,
+                    tutti i dispositivi vengono spenti.
+                */
+                resetAll();
+            }
+            else if (params[0] == "time")
+            {
+                /*  reset time:
+                    resetta il tempo del sistema, riportandolo all’orario 00:00.
+                    Riporta tutti i dispositivi alle condizioni iniziali.
+                    Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
+                */
+                resetTime();
+            }
+            else if (params[0] == "timers")
+            {
+                /*  reset timers:
+                    Rimuove i timer di tutti i dispositivi.
+                    Tutti i dispositivi rimangono nel loro stato attuale.
+                */
+                resetTimers();
+            }
+            else
+            {
+                // Parametri errati nel comando.
+            }
+        }
+        else
+        {
+            // Parametri errati nel comando.
+        }
+    };
+};
 
 // Esegue un comando dato come input.
 void DomoticSystem::executeCommand(const std::string &input)
