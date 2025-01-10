@@ -85,103 +85,100 @@ void DomoticSystem::removeDevice(std::size_t id)
 // Inizializza i comandi presenti nell'interfaccia utente.
 void DomoticSystem::initializeCommands(void)
 {
-
     this->commands_["set"] = [this](const std::vector<std::string> &params)
     {
         if (params.size() == 2)
         {
-            if (params[0] == "time") // Imposta il tempo del sistema, non di un device
+            if (params[0] == "time") // set time ${TIME}, va a una specifica ora del giorno.
             {
                 // parse params[1], dovrebbe essere in formato HH:MM secondo l'esempio del prof
-
                 // storedTime_.setTime(hours, minutes);
             }
             else
             {
                 auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
-                if (it != this->devices_.end()) // Trova il device
+                if (it != this->devices_.end()) // Se trovo il device.
                 {
                     DomoticDevice *device = it->get();
-                    if (params[1] == "on")
+                    if (params[1] == "on") // set ${DEVICENAME} on, accende il dispositivo
                         device->turnOn();
-                    else if (params[1] == "off")
+                    else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
                         device->turnOff();
 
-                    else if (params[1] == "controlloFormattazioneTempo") // se invece e' specificato un tempo, controlla tipo di device
+                    else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un FixedDomoticDevice.
                     {
-
-                        // DomoticDevice::setTimer() / FixedCycleDevice::setTimer()
-                        // (notare che il terzo parametro e' opzionale e solo usato per device manuali)
-
+                        // Notare che il terzo parametro è opzionale e solo usato per device manuali.
                         if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
-                            fixedDevice->setTimer(device->getStartTime());
-                        else
-                            device->setTimer(device->getStartTime(), device->getOffTime());
+                            fixedDevice->setTimer(Time::toTime(params[1]));
                     }
                     else
                     {
-                        // log errore
+                        // params[1] non è { "on", "off", Time }.
                     }
                 }
                 else
                     throw std::runtime_error("device not found");
             }
         }
-        else if (params.size() >= 3)
+        else if (params.size() == 3) // set ${DEVICENAME} ${START} [${STOP}], imposta l’orario di accensione e spegnimento per un DomoticDevice.
         {
-            // trova device e controlla che sia DomoticDevice, altrimenti ignora, dato che FixedCycleDevice e' gestito sopra
-            // DomoticDevice::setTimer()
-        }
-        else
-        {
-            // log errore
-        }
-    };
-
-    this->commands_["rm"] = [this](const std::vector<std::string> &params)
-    {
-        if (params.size() > 0)
-        {
-            // trova device e controlla che sia FixedCycleDevice
-            // FixedCycleDevice::stopCycle()
-            // log
-        }
-        else
-        {
-            // log errore
-        }
-    };
-
-    this->commands_["show"] = [this](const std::vector<std::string> &params)
-    {
-        // std::cout << *this;
-    };
-
-    this->commands_["reset"] = [this](const std::vector<std::string> &params)
-    {
-        if (params.size() > 0)
-        {
-            if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
+            if (it != this->devices_.end()) // Se trovo il device.
             {
-                resetTimers();
-                // log
+                DomoticDevice *device = it->get();
+                device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
             }
-
-            else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+            else
             {
-                resetAll();
+                // Device non trovato.
+            }
+        };
+
+        this->commands_["rm"] = [this](const std::vector<std::string> &params)
+        {
+            if (params.size() > 0)
+            {
+                // trova device e controlla che sia FixedCycleDevice
+                // FixedCycleDevice::stopCycle()
                 // log
             }
             else
             {
                 // log errore
             }
-        }
-        else
+        };
+
+        this->commands_["show"] = [this](const std::vector<std::string> &params)
         {
-            resetTime();
-            // log
-        }
+            // std::cout << *this;
+        };
+
+        this->commands_["reset"] = [this](const std::vector<std::string> &params)
+        {
+            if (params.size() > 0)
+            {
+                if (params[0] == "timers") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+                {
+                    resetTimers();
+                    // log
+                }
+
+                else if (params[0] == "all") // quando i comandi sono passati dovrebbero essere tutti messi in lower case
+                {
+                    resetAll();
+                    // log
+                }
+                else
+                {
+                    // log errore
+                }
+            }
+            else
+            {
+                resetTime();
+                // log
+            }
+        };
     };
 }
 
