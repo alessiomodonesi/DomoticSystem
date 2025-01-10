@@ -4,6 +4,7 @@
 #define DOMOTICDEVICE_H
 
 #include <iostream>
+#include "Time.h"
 
 // Classe base per rappresentare un dispositivo domotico generico.
 // Questa classe offre funzionalità comuni come accensione/spegnimento,
