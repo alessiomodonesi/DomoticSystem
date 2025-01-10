@@ -44,15 +44,12 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
     return this->powerConsumption_ * usedTime;
 }
 
-// Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
-std::ostream &showCurrentEnergyConsumption(std::ostream &os, const DomoticDevice &device)
+// Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
+double DomoticDevice::showCurrentEnergyConsumption(void)
 {
-    double startHour = device.getStartTime().getHours() + (device.getStartTime().getMinutes() / 60);
+    double startHour = this->getStartTime().getHours() + (this->getStartTime().getMinutes() / 60);
     double nowHour = NOW.getHours() + (NOW.getMinutes() / 60);
-    double usedTime = nowHour - startHour;
-
-    os << "[" << NOW << "] Il dispositivo " << device.getName() << " ha attualmente consumato " << device.getPowerConsumption() * usedTime << std::endl;
-    return os;
+    return this->getPowerConsumption() * (nowHour - startHour);
 }
 
 // Ritorna lo stato del dispositivo in formato leggibile.

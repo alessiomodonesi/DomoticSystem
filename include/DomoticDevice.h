@@ -33,15 +33,15 @@ public:
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
     void turnOff(void);
 
+    // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
+    double showCurrentEnergyConsumption(void);
+
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);
 
     // Calcola il consumo energetico in base alle ore di funzionamento.
     // Chiarimento: Il consumo viene calcolato considerando un assorbimento costante.
     double calculateEnergyConsumption(const Time &startTime, const Time &offTime) const;
-
-    // Mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
-    std::ostream &showCurrentEnergyConsumption(std::ostream &os, const DomoticDevice &device);
 
     // Getter per ID, nome, potenza, stato ed orario e consumo energetico totale dalle 00:00.
     std::size_t getId(void) const { return id_; }

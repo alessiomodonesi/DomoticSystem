@@ -109,7 +109,22 @@ void DomoticSystem::initializeCommands(void)
             if (params[0] == "time") // set time ${TIME}, va a una specifica ora del giorno.
             {
                 std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
-                NOW.setTime(Time::toTime(params[1]).getHours(), Time::toTime(params[1]).getMinutes());
+                for (int h = NOW.getHours(); h <= Time::toTime(params[1]).getHours(); ++h)
+                {
+                    int startMinute = (h == NOW.getHours()) ? NOW.getMinutes() : 0;
+                    int endMinute = (h == Time::toTime(params[1]).getHours()) ? Time::toTime(params[1]).getMinutes() : 59;
+
+                    for (int m = startMinute; m <= endMinute; ++m)
+                    {
+                        NOW.setTime(h, m); // Aggiorna l'orario
+
+                        if (!(h == NOW.getHours() && m == startMinute)) // Salta la stampa "Log accensioni" per il primo minuto
+                            std::cout << "[" << NOW << "] Log accensioni e spegnimenti" << std::endl;
+
+                        if (h == Time::toTime(params[1]).getHours() && m == endMinute) // Stampa finale alla fine del ciclo
+                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                    }
+                }
             }
             else
             {
@@ -120,13 +135,15 @@ void DomoticSystem::initializeCommands(void)
                     if (params[1] == "on") // set ${DEVICENAME} on, accende il dispositivo
                     {
                         device->turnOn();
-                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                                  << std::endl;
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
                     {
                         device->turnOff();
-                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                                  << std::endl;
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
                     }
                     else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un FixedDomoticDevice.
@@ -134,7 +151,8 @@ void DomoticSystem::initializeCommands(void)
                         // Notare che il terzo parametro è opzionale e solo usato per device manuali.
                         if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
                         {
-                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                                      << std::endl;
                             fixedDevice->setTimer(Time::toTime(params[1]));
                             std::cout << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
                         }
@@ -151,7 +169,8 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 DomoticDevice *device = it->get();
                 device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
                 std::cout << "[" << NOW << "] Impostato un timer per il dispositivo "
@@ -171,7 +190,8 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 DomoticDevice *device = it->get();
                 if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
                 {
@@ -195,7 +215,8 @@ void DomoticSystem::initializeCommands(void)
     {
         if (params.size() == 0) // show, mostra la lista di tutti i dispositivi con la produzione/consumo energetico di ciascuno e la produzione/consumo energetico totale del sistema dalle 00:00.
         {
-            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                      << std::endl;
             std::cout << this->devices_ << std::endl;
         }
         else if (params.size() == 1) // show ${DEVICENAME}, mostra a schermo produzione/consumo energetico di uno specifico dispositivo.
@@ -203,9 +224,11 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 DomoticDevice *device = it->get();
-                device->showCurrentEnergyConsumption(std::cout, *device);
+                std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente consumato "
+                          << device->showCurrentEnergyConsumption() << std::endl;
             }
             else
                 std::cerr << "Device not found" << std::endl;
@@ -225,7 +248,8 @@ void DomoticSystem::initializeCommands(void)
                     tutti i timer vengono rimossi,
                     tutti i dispositivi vengono spenti.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 resetAll();
             }
             else if (params[0] == "time")
@@ -235,7 +259,8 @@ void DomoticSystem::initializeCommands(void)
                     Riporta tutti i dispositivi alle condizioni iniziali.
                     Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 resetTime();
             }
             else if (params[0] == "timers")
@@ -244,7 +269,8 @@ void DomoticSystem::initializeCommands(void)
                     Rimuove i timer di tutti i dispositivi.
                     Tutti i dispositivi rimangono nel loro stato attuale.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
+                          << std::endl;
                 resetTimers();
             }
             else
