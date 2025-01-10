@@ -66,7 +66,7 @@ public:
     double getDailySystemConsumption(void) const { return dailySystemConsumption_; }
 
     // Mostra la lista di tutti i dispositivi.
-    friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> devices_);
+    friend std::ostream &operator<<(std::ostringstream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_);
 };
 
 #endif // DOMOTICSYSTEM_H
