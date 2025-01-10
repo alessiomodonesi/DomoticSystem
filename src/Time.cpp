@@ -47,7 +47,7 @@ Time Time::calculateOffTime(const Time &startTime, const int cycleDuration)
 }
 
 // Controlla la formattazione di un orario.
-static bool isTime(const std::string &time) // Time deve essere in formato HH:MM
+bool Time::isTime(const std::string &time) // Time deve essere in formato HH:MM
 {
     int h = std::stoi(time.substr(0, 2));
     int m = std::stoi(time.substr(3, 2));
@@ -55,7 +55,7 @@ static bool isTime(const std::string &time) // Time deve essere in formato HH:MM
 }
 
 // Restituisce un orario formattato.
-static Time toTime(const std::string &time) // Time deve essere in formato HH:MM
+Time Time::toTime(const std::string &time) // Time deve essere in formato HH:MM
 {
     int h = std::stoi(time.substr(0, 2));
     int m = std::stoi(time.substr(3, 2));
