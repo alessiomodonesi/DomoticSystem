@@ -33,13 +33,10 @@ public:
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
     void turnOff(void);
 
-    // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
-    double showCurrentEnergyConsumption(void);
-
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);
 
-    // Calcola il consumo energetico in base alle ore di funzionamento.
+    // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
     // Chiarimento: Il consumo viene calcolato considerando un assorbimento costante.
     double calculateEnergyConsumption(const Time &startTime, const Time &offTime) const;
 

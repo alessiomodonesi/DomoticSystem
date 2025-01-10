@@ -36,7 +36,7 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
     this->offTime_ = offTime;
 }
 
-// Calcola il consumo energetico in base alle ore di funzionamento.
+// // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
 double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Time &offTime) const
 {
     Time intervals = offTime - startTime;
@@ -44,26 +44,22 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Ti
     return this->powerConsumption_ * usedTime;
 }
 
-// Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
-double DomoticDevice::showCurrentEnergyConsumption(void)
-{
-    double startHour = this->getStartTime().getHours() + (this->getStartTime().getMinutes() / 60);
-    double nowHour = NOW.getHours() + (NOW.getMinutes() / 60);
-    return this->getPowerConsumption() * (nowHour - startHour);
-}
-
 // Ritorna lo stato del dispositivo in formato leggibile.
 std::ostream &operator<<(std::ostream &os, const DomoticDevice &device)
 {
     os << "ID: " << device.getId()
-       << "\nName: " << device.getName()
-       << "\nStatus: " << (device.isDeviceOn() ? "Acceso" : "Spento");
+       << "\nNome: " << device.getName()
+       << "\nStato: " << (device.isDeviceOn() ? "Acceso" : "Spento");
 
     if (device.getPowerConsumption() > 0)
-        os << "\nPower Production: " << device.getPowerConsumption() << " kW";
+    {
+        os << "\nPotenza Prodotta: " << device.getPowerConsumption() << " kW";
+        os << "\nEnergia Giornaliera Prodotta: " << device.getDailyConsumption() << " kWh\n";
+    }
     else
-        os << "\nPower Consumption: " << device.getPowerConsumption() << " kW";
-
-    os << "\nDaily Energy Consumption: " << device.getDailyConsumption() << " kWh\n";
+    {
+        os << "\nPotenza Consumata: " << device.getPowerConsumption() << " kW";
+        os << "\nEnergia Giornaliera Consumata: " << device.getDailyConsumption() << " kWh\n";
+    }
     return os;
 }

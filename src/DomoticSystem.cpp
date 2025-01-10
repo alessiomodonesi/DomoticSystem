@@ -10,7 +10,7 @@ DomoticSystem::DomoticSystem(double powerConsumption)
     : maxPowerConsumption_{powerConsumption}, dailySystemConsumption_{0}
 {
     if (maxPowerConsumption_ < 0.5 || maxPowerConsumption_ > 6.0)
-        throw std::invalid_argument("maxPowerConsumption must be [0.5 kW, 6.0 kW]");
+        throw std::invalid_argument("maxPowerConsumption dev'essere [0.5 kW, 6.0 kW]");
 
     initializeCommands();
 }
@@ -48,7 +48,7 @@ void DomoticSystem::handleOverConsumption(void)
         if (it != this->devices_.rend())
             (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
         else
-            std::cerr << "Overconsumption cannot be resolved: all devices are off." << std::endl;
+            std::cerr << "L'overconsumption non può essere risolta: tutti i dispositivi sono spenti." << std::endl;
     }
 }
 
@@ -79,23 +79,28 @@ void DomoticSystem::removeDevice(std::size_t id)
     if (it != this->devices_.end())
         this->devices_.erase(it);
     else
-        std::cerr << "Device not found" << std::endl;
+        std::cerr << "Dispositivo non trovato" << std::endl;
 }
 
 // Mostra la lista di tutti i dispositivi.
 std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<DomoticDevice>> &devices_)
 {
+    double dailySystemProduction = 0.0;
     double dailySystemConsumption = 0.0;
+
     for (const auto &device : devices_)
     {
-        // Usa l'overload di << per DomoticDevice
-        os << *device << "\n";
-
-        // Somma il consumo energetico
-        dailySystemConsumption += device->getDailyConsumption();
+        if (device->getPowerConsumption() > 0)
+            dailySystemProduction += device->getDailyConsumption(); // Somma la produzione energetica
+        else
+            dailySystemConsumption += device->getDailyConsumption(); // Somma il consumo energetico
     }
 
-    os << "Total System Energy Consumption: " << dailySystemConsumption << " kWh\n";
+    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemProduction << " kWh. \n"
+       << "Nello specifico:" << "\n\n";
+
+    for (const auto &device : devices_)
+        os << *device << "\n"; // Usa l'overload di << per DomoticDevice
     return os;
 }
 
@@ -135,15 +140,13 @@ void DomoticSystem::initializeCommands(void)
                     if (params[1] == "on") // set ${DEVICENAME} on, accende il dispositivo
                     {
                         device->turnOn();
-                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                                  << std::endl;
+                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
                     {
                         device->turnOff();
-                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                                  << std::endl;
+                        std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
                     }
                     else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un FixedDomoticDevice.
@@ -151,17 +154,16 @@ void DomoticSystem::initializeCommands(void)
                         // Notare che il terzo parametro è opzionale e solo usato per device manuali.
                         if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
                         {
-                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                                      << std::endl;
+                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                             fixedDevice->setTimer(Time::toTime(params[1]));
                             std::cout << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
                         }
                     }
                     else
-                        std::cerr << "Invalid command" << std::endl;
+                        std::cerr << "Comando non trovato" << std::endl;
                 }
                 else
-                    std::cerr << "Device not found" << std::endl;
+                    std::cerr << "Dispositivo non trovato" << std::endl;
             }
         }
         else if (params.size() == 3) // set ${DEVICENAME} ${START} [${STOP}], imposta l’orario di accensione e spegnimento per un DomoticDevice.
@@ -169,18 +171,17 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                 DomoticDevice *device = it->get();
                 device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
                 std::cout << "[" << NOW << "] Impostato un timer per il dispositivo "
                           << device->getName() << " dalle " << Time::toTime(params[1]) << " alle " << Time::toTime(params[2]) << std::endl;
             }
             else
-                std::cerr << "Device not found" << std::endl;
+                std::cerr << "Dispositivo non trovato" << std::endl;
         }
         else
-            std::cerr << "Invalid command" << std::endl;
+            std::cerr << "Comando non trovato" << std::endl;
     };
 
     this->commands_["rm"] = [this](const std::vector<std::string> &params)
@@ -190,8 +191,7 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                 DomoticDevice *device = it->get();
                 if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
                 {
@@ -205,10 +205,10 @@ void DomoticSystem::initializeCommands(void)
                 }
             }
             else
-                std::cerr << "Device not found" << std::endl;
+                std::cerr << "Dispositivo non trovato" << std::endl;
         }
         else
-            std::cerr << "Invalid command" << std::endl;
+            std::cerr << "Comando non trovato" << std::endl;
     };
 
     this->commands_["show"] = [this](const std::vector<std::string> &params)
@@ -224,17 +224,21 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                 DomoticDevice *device = it->get();
-                std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente consumato "
-                          << device->showCurrentEnergyConsumption() << std::endl;
+
+                if (device->getPowerConsumption() > 0)
+                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente prodotto "
+                              << device->getDailyConsumption() << std::endl;
+                else
+                    std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " ha attualmente consumato "
+                              << device->getDailyConsumption() << std::endl;
             }
             else
-                std::cerr << "Device not found" << std::endl;
+                std::cerr << "Dispositivo non trovato" << std::endl;
         }
         else
-            std::cerr << "Invalid command" << std::endl;
+            std::cerr << "Comando non trovato" << std::endl;
     };
 
     this->commands_["reset"] = [this](const std::vector<std::string> &params)
@@ -274,10 +278,10 @@ void DomoticSystem::initializeCommands(void)
                 resetTimers();
             }
             else
-                std::cerr << "Invalid command" << std::endl;
+                std::cerr << "Comando non trovato" << std::endl;
         }
         else
-            std::cerr << "Invalid command" << std::endl;
+            std::cerr << "Comando non trovato" << std::endl;
     };
     this->commands_["clear"] = [this](const std::vector<std::string> &params)
     { system("clear"); };
@@ -324,11 +328,11 @@ void DomoticSystem::executeCommand(const std::string &input)
         }
         catch (const std::exception &e)
         {
-            std::cerr << "Error during comand execution: " << e.what() << std::endl;
+            std::cerr << "Errore durante l'esecuzione del comando: " << e.what() << std::endl;
         }
     }
     else // Comando non trovato
-        std::cerr << "Invalid command: " << command << std::endl;
+        std::cerr << "Comando non trovato: " << command << std::endl;
 }
 
 // COMANDI PER IL DEBUG
