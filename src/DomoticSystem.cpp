@@ -172,23 +172,28 @@ void DomoticSystem::initializeCommands(void)
                     DomoticDevice *device = it->get();
                     if (params[1] == "on") // set ${DEVICENAME} on, accende il dispositivo
                     {
-                        device->turnOn();
                         std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                        device->turnOn();
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
                     {
-                        device->turnOff();
                         std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                        device->turnOff();
                         std::cout << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
                     }
-                    else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un FixedDomoticDevice.
+                    else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un dispositivo.
                     {
-                        // Notare che il terzo parametro è opzionale e solo usato per device manuali.
                         if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
                         {
                             std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                             fixedDevice->setTimer(Time::toTime(params[1]));
+                            std::cout << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                            device->setTimer(Time::toTime(params[1]), Time(-1, -1)); // Notare che il terzo parametro è opzionale e solo usato per device manuali.
                             std::cout << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
                         }
                     }
@@ -204,11 +209,16 @@ void DomoticSystem::initializeCommands(void)
             auto it = std::find_if(this->devices_.begin(), this->devices_.end(), idIsPresent(std::hash<std::string>{}(params[0])));
             if (it != this->devices_.end()) // Se trovo il device.
             {
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                 DomoticDevice *device = it->get();
-                device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
-                std::cout << "[" << NOW << "] Impostato un timer per il dispositivo "
-                          << device->getName() << " dalle " << Time::toTime(params[1]) << " alle " << Time::toTime(params[2]) << std::endl;
+                if (FixedCycleDevice *fixedDevice = dynamic_cast<FixedCycleDevice *>(device))
+                    std::cerr << "Comando non valido per il dispositivo " << fixedDevice->getName() << std::endl;
+                else
+                {
+                    std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                    device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
+                    std::cout << "[" << NOW << "] Impostato un timer per il dispositivo "
+                              << device->getName() << " dalle " << Time::toTime(params[1]) << " alle " << Time::toTime(params[2]) << std::endl;
+                }
             }
             else
                 std::cerr << "Dispositivo non trovato" << std::endl;
@@ -317,7 +327,10 @@ void DomoticSystem::initializeCommands(void)
             std::cerr << "Comando non trovato" << std::endl;
     };
     this->commands_["clear"] = [this](const std::vector<std::string> &params)
-    { system("clear"); };
+    {
+        if (system("clear") != 0)
+            std::cerr << "Warning: il comando 'clear' non è stato eseguito correttamente" << std::endl;
+    };
     this->commands_["exit"] = [this](const std::vector<std::string> &params)
     { exit(0); };
 };
