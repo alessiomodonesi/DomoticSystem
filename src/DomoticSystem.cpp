@@ -95,7 +95,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<Dom
         dailySystemConsumption += device->getDailyConsumption();
     }
 
-    os << "\nTotal System Energy Consumption: " << dailySystemConsumption << " kW\n";
+    os << "Total System Energy Consumption: " << dailySystemConsumption << " kWh\n";
     return os;
 }
 

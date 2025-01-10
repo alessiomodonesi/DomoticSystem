@@ -56,8 +56,13 @@ std::ostream &operator<<(std::ostream &os, const DomoticDevice &device)
 {
     os << "ID: " << device.getId()
        << "\nName: " << device.getName()
-       << "\nStatus: " << (device.isDeviceOn() ? "Acceso" : "Spento")
-       << "\nPower Consumption: " << device.getPowerConsumption() << " kW"
-       << "\nDaily Energy Consumption: " << device.getDailyConsumption() << " kW\n";
+       << "\nStatus: " << (device.isDeviceOn() ? "Acceso" : "Spento");
+
+    if (device.getPowerConsumption() > 0)
+        os << "\nPower Production: " << device.getPowerConsumption() << " kW";
+    else
+        os << "\nPower Consumption: " << device.getPowerConsumption() << " kW";
+
+    os << "\nDaily Energy Consumption: " << device.getDailyConsumption() << " kWh\n";
     return os;
 }
