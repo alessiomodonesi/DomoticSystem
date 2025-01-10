@@ -19,8 +19,14 @@ struct Time
     // Resetta il tempo del sistema, riportandolo all’orario 00:00.
     void resetTime(void);
 
+    // Calcola l'offTime di un FixedCycleDevice.
+    static Time calculateOffTime(const Time &startTime, const int cycleDuration);
+
+    // Controlla la formattazione di un orario.
+    static bool isTime(const std::string &time);
+
     // Restituisce un orario formattato.
-    static Time formattingTime(const Time &startTime, const int cycleDuration);
+    static Time toTime(const std::string &time);
 
     // Getter per hour e minute.
     int getHours(void) const { return hours_; }
@@ -29,6 +35,8 @@ struct Time
 
 // HELPER FUNCTION
 Time operator-(const Time &a, const Time &b);
+bool operator>(const Time &a, const Time &b);
+bool operator<(const Time &a, const Time &b);
 bool operator==(const Time &a, const Time &b);
 bool operator!=(const Time &a, const Time &b);
 std::ostream &operator<<(std::ostringstream &os, const Time &obj);

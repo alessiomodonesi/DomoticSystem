@@ -28,8 +28,8 @@ void Time::resetTime(void)
     setTime(0, 0);
 }
 
-// Restituisce un orario formattato.
-Time Time::formattingTime(const Time &startTime, const int cycleDuration)
+// Calcola l'offTime di un FixedCycleDevice.
+Time Time::calculateOffTime(const Time &startTime, const int cycleDuration)
 {
     int h = (int)cycleDuration / 60;
     int m = cycleDuration - (h * 60);
@@ -46,6 +46,22 @@ Time Time::formattingTime(const Time &startTime, const int cycleDuration)
     return Time(h, m);
 }
 
+// Controlla la formattazione di un orario.
+static bool isTime(const std::string &time) // Time deve essere in formato HH:MM
+{
+    int h = std::stoi(time.substr(0, 2));
+    int m = std::stoi(time.substr(3, 2));
+    return (h >= 0 && h <= 23) && (m >= 0 && m <= 59);
+}
+
+// Restituisce un orario formattato.
+static Time toTime(const std::string &time) // Time deve essere in formato HH:MM
+{
+    int h = std::stoi(time.substr(0, 2));
+    int m = std::stoi(time.substr(3, 2));
+    return Time(h, m);
+}
+
 // HELPER FUNCTION
 
 Time operator-(const Time &a, const Time &b)
@@ -56,6 +72,22 @@ Time operator-(const Time &a, const Time &b)
     int h = (int)min / 60;
     int m = min - (h * 60);
     return Time(h, m);
+}
+
+bool operator>(const Time &a, const Time &b)
+{
+    if (a.getHours() == b.getHours())
+        return a.getMinutes() > b.getMinutes();
+    else
+        return a.getHours() > b.getHours();
+}
+
+bool operator<(const Time &a, const Time &b)
+{
+    if (a.getHours() == b.getHours())
+        return a.getMinutes() < b.getMinutes();
+    else
+        return a.getHours() < b.getHours();
 }
 
 bool operator==(const Time &a, const Time &b)
