@@ -285,9 +285,10 @@ void DomoticSystem::initializeCommands(void)
                     tutti i timer vengono rimossi,
                     tutti i dispositivi vengono spenti.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
                 resetAll();
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] Tutti i timer sono stati rimossi" << std::endl;
+                std::cout << "[" << NOW << "] Tutti i dispositivi sono stati ripristinati" << std::endl;
             }
             else if (params[0] == "time")
             {
@@ -296,9 +297,9 @@ void DomoticSystem::initializeCommands(void)
                     Riporta tutti i dispositivi alle condizioni iniziali.
                     Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
                 resetTime();
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] Tutti i dispositivi sono stati ripristinati" << std::endl;
             }
             else if (params[0] == "timers")
             {
@@ -306,8 +307,7 @@ void DomoticSystem::initializeCommands(void)
                     Rimuove i timer di tutti i dispositivi.
                     Tutti i dispositivi rimangono nel loro stato attuale.
                 */
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << "\n"
-                          << std::endl;
+                std::cout << "[" << NOW << "] Tutti i timer sono stati rimossi" << std::endl;
                 resetTimers();
             }
             else
