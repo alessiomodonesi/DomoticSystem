@@ -11,5 +11,8 @@ int main()
 
     // Rimuovere un dispositivo.
     system.removeDevice(std::hash<std::string>{}("Lavatrice"));
+
+    // Eseguire un comando.
+    system.executeCommand("set Impianto fotovoltaico on");
     return 0;
 }

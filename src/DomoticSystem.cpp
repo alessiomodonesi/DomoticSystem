@@ -249,29 +249,38 @@ void DomoticSystem::initializeCommands(void)
 void DomoticSystem::executeCommand(const std::string &input)
 {
     std::string copy = input;
+
+    // Trasforma tutti i caratteri della stringa `copy` in minuscolo.
     std::transform(copy.begin(), copy.end(), copy.begin(), [](unsigned char c)
                    { return std::tolower(c); });
+
+    // Utilizza un `std::istringstream` per analizzare la stringa trasformata `copy`.
+    // Questo permette di dividere il comando principale dai suoi parametri.
     std::istringstream stream(copy);
     std::string command;
-    std::getline(stream, command, ' '); // Prendo il primo termine della stringa input, il "comando"
 
-    std::vector<std::string> params;
+    // Estrae il primo termine della stringa (il comando) fino al primo spazio.
+    // Esempio: "set device1 on" -> command = "set"
+    std::getline(stream, command, ' ');
+
+    std::vector<std::string> params; // Vettore per memorizzare i parametri del comando.
     std::string word;
 
-    // Suddivido la seconda parte della stringa input, i parametri
+    // Estrae tutti i termini rimanenti nella stringa (i parametri) separati da spazi.
+    // Ogni parola successiva al comando principale viene aggiunta a `params`.
+    // Esempio: "set device1 on" -> params = ["device1", "on"]
     while (std::getline(stream, word, ' '))
-    {
         params.push_back(word);
-    }
 
+    // Cerca il comando nella mappa `commands_`, che associa comandi (stringhe)
+    // a funzioni (lambdas) che implementano il loro comportamento.
     auto it = commands_.find(command);
-    if (it != commands_.end())
-    {
-        it->second(params); // Passa i parametri alla funzione nella mappa comandi
-    }
+
+    if (it != commands_.end()) // Se il comando è trovato, chiama la funzione associata con i parametri estratti.
+        it->second(params);    // Esegue il comportamento del comando.
     else
     {
-        // log errore
+        // Comando non trovato.
     }
 }
 
