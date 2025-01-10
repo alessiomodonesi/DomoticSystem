@@ -3,6 +3,9 @@
 #include <iostream>
 #include "Time.h"
 
+// Orario corrente del sistema
+Time NOW = {0, 0};
+
 // Costruttore
 Time::Time(int h, int m)
 {
@@ -111,6 +114,3 @@ std::ostream &operator<<(std::ostream &os, const Time &obj)
     os << offsetH << obj.getHours() << ":" << offsetM << obj.getMinutes() << std::endl;
     return os;
 }
-
-// Orario corrente del sistema
-Time NOW;
