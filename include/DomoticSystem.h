@@ -50,13 +50,24 @@ public:
 
     // COMANDI PER IL DEBUG:
 
-    // Resetta il tempo del sistema.
+    /*  reset time:
+        Resetta il tempo del sistema, riportandolo all’orario 00:00.
+        Riporta tutti i dispositivi alle condizioni iniziali.
+        Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
+    */
     void resetTime(void);
 
-    // Rimuove i timer di tutti i dispositivi.
+    /*  reset timers:
+        Rimuove i timer di tutti i dispositivi.
+        Tutti i dispositivi rimangono nel loro stato attuale.
+    */
     void resetTimers(void);
 
-    // Riporta il sistema alle condizioni iniziali.
+    /* reset all, riporta il sistema alle condizioni iniziali:
+        L’orario viene impostato a 00:00,
+        Tutti i timer vengono rimossi,
+        Tutti i dispositivi vengono spenti.
+    */
     void resetAll(void);
 
     // Getter per dailySystemConsumption_ e storedTime_

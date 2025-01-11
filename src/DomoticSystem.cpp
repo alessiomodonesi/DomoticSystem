@@ -313,22 +313,10 @@ void DomoticSystem::initializeCommands(void)
     {
         if (params.size() == 1)
         {
-            if (params[0] == "all")
-            {
-                /* reset all, riporta il sistema alle condizioni iniziali:
-                    l’orario viene impostato a 00:00,
-                    tutti i timer vengono rimossi,
-                    tutti i dispositivi vengono spenti.
-                */
-                resetAll();
-                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
-                std::cout << "[" << NOW << "] Tutti i timer sono stati rimossi" << std::endl;
-                std::cout << "[" << NOW << "] Tutti i dispositivi sono stati ripristinati" << std::endl;
-            }
-            else if (params[0] == "time")
+            if (params[0] == "time")
             {
                 /*  reset time:
-                    resetta il tempo del sistema, riportandolo all’orario 00:00.
+                    Resetta il tempo del sistema, riportandolo all’orario 00:00.
                     Riporta tutti i dispositivi alle condizioni iniziali.
                     Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
                 */
@@ -344,6 +332,18 @@ void DomoticSystem::initializeCommands(void)
                 */
                 std::cout << "[" << NOW << "] Tutti i timer sono stati rimossi" << std::endl;
                 resetTimers();
+            }
+            else if (params[0] == "all")
+            {
+                /* reset all, riporta il sistema alle condizioni iniziali:
+                    L’orario viene impostato a 00:00,
+                    Tutti i timer vengono rimossi,
+                    Tutti i dispositivi vengono spenti.
+                */
+                resetAll();
+                std::cout << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+                std::cout << "[" << NOW << "] Tutti i timer sono stati rimossi" << std::endl;
+                std::cout << "[" << NOW << "] Tutti i dispositivi sono stati ripristinati" << std::endl;
             }
             else
                 std::cerr << "Comando non trovato" << std::endl;
@@ -408,13 +408,28 @@ void DomoticSystem::executeCommand(const std::string &input)
 
 // COMANDI PER IL DEBUG
 
-// Resetta il tempo del sistema.
+/*  reset time:
+    Resetta il tempo del sistema, riportandolo all’orario 00:00.
+    Riporta tutti i dispositivi alle condizioni iniziali.
+    Gli eventuali timer aggiunti dopo l’avvio del sistema vengono mantenuti.
+*/
 void DomoticSystem::resetTime(void)
 {
     NOW = Time(0, 0);
+
+    for (const auto &device : this->devices_)
+    {
+        if (device->isDeviceOn())
+            device->turnOff();
+
+        device->setDailyConsumption(0);
+    }
 }
 
-// Rimuove i timer di tutti i dispositivi.
+/*  reset timers:
+    Rimuove i timer di tutti i dispositivi.
+    Tutti i dispositivi rimangono nel loro stato attuale.
+*/
 void DomoticSystem::resetTimers(void)
 {
     for (const auto &device : this->devices_)
@@ -432,12 +447,13 @@ void DomoticSystem::resetTimers(void)
     }
 }
 
-// Riporta il sistema alle condizioni iniziali.
+/* reset all, riporta il sistema alle condizioni iniziali:
+    L’orario viene impostato a 00:00,
+    Tutti i timer vengono rimossi,
+    Tutti i dispositivi vengono spenti.
+*/
 void DomoticSystem::resetAll(void)
 {
-    this->resetTime();
     this->resetTimers();
-
-    for (const auto &device : this->devices_)
-        device->turnOff();
+    this->resetTime();
 }

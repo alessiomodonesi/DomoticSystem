@@ -49,7 +49,8 @@ public:
     Time getStartTime(void) const { return startTime_; }
     Time getOffTime(void) const { return offTime_; }
 
-    // Setter per startTime_ and offTime_
+    // Setter per dailyConsumption_, startTime_ and offTime_
+    void setDailyConsumption(int dailyConsumption) { dailyConsumption_ = dailyConsumption; }
     void setStartTime(Time startTime) { startTime_ = startTime; }
     void setOffTime(Time offTime) { offTime_ = offTime; }
 };
