@@ -1,27 +1,34 @@
 // @author Alessio Modonesi
 
-#include "UnifiedLogger.h"
+#include "Logger.h"
 
 // Inizializzazione del logger globale
-UnifiedLogger logger("../log.txt");
+Logger logger("../log.txt");
 
 // Costruttore
-UnifiedLogger::UnifiedLogger(const std::string& filename) {
+Logger::Logger(const std::string& filename) {
     fileStream.open(filename, std::ios::out | std::ios::trunc); // Modalità trunc per svuotare il file
     if (!fileStream.is_open())
         throw std::runtime_error("Impossibile aprire il file: " + filename);
 }
 
 // Distruttore
-UnifiedLogger::~UnifiedLogger() {
+Logger::~Logger() {
     if (fileStream.is_open())
         fileStream.close();
 }
 
-// Overload dell'operatore << per manipolatori di stream
-UnifiedLogger& UnifiedLogger::operator<<(std::ostream& (*manip)(std::ostream&)) {
+// Overload dell'operatore << per *manip
+void Logger::log(std::ostream& (*manip)(std::ostream&)) {
+    if (fileStream.is_open())
+        fileStream << manip;
+}
+
+// Overload dell'operatore << per *manip
+Logger& Logger::operator<<(std::ostream& (*manip)(std::ostream&)) {
     std::cout << manip;
     if (fileStream.is_open())
         fileStream << manip;
     return *this;
 }
+

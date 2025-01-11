@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "DomoticSystem.h"
 #include "DomoticDevice.h"
@@ -35,8 +36,13 @@ int main()
     {
         std::cout << ">> ";
         std::getline(std::cin, input);
+
+        // Logga il comando inserito dall'utente
+        logger.log(">> " + input);
+        logger.log(std::endl);
+
+        // Esegue il comando
         system.executeCommand(input);
     }
-
     return 0;
 }

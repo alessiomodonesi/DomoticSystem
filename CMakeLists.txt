@@ -7,11 +7,11 @@ project(Domotica)
 include_directories(include)
 add_library(
     ${PROJECT_NAME} SHARED
-    src/Time.cpp
     src/DomoticSystem.cpp
     src/DomoticDevice.cpp
     src/FixedCycleDevice.cpp
-    src/UnifiedLogger.cpp
+    src/Logger.cpp
+    src/Time.cpp
 )
 add_executable(main src/main.cpp)
 target_link_libraries(main ${PROJECT_NAME})
