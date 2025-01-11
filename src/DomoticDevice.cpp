@@ -32,7 +32,7 @@ bool DomoticDevice::turnOff()
     if (this->isOn_)
     {
         this->isOn_ = false;
-        this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
+        // this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
         this->setTimer(Time(-1, -1), Time(-1, -1));
         return true;
     }
@@ -46,22 +46,33 @@ bool DomoticDevice::turnOff()
 // Imposta l’orario di accensione e spegnimento per il dispositivo.
 void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
 {
-    if (offTime != Time(-1, -1))
+    if (startTime != Time(-1, -1) && offTime != Time(-1, -1)) // Chiamata del tipo "set ${DEVICENAME} ${START} ${STOP}"
     {
         // Controllo che startTime sia minore di offTime
         if (startTime <= offTime)
         {
             this->startTime_ = startTime;
             this->offTime_ = offTime;
+            // logger<< "DEBUG: set ${DEVICENAME} ${START} ${STOP}" << std::endl;
         }
         else
             logger<< "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
     }
-    else
+    else if (startTime != Time(-1, -1) &&  offTime == Time(-1, -1))// Chiamata del tipo "set ${DEVICENAME} on", "set ${DEVICENAME} ${START}"
     {
         this->startTime_ = startTime;
         this->offTime_ = offTime;
+        // logger<< "DEBUG: set ${DEVICENAME} on | set ${DEVICENAME} ${START}" << std::endl;
     }
+    else if (startTime == Time(-1, -1) && offTime == Time(-1, -1)) // Chiamata del tipo "set ${DEVICENAME} off", "reset time", "reset all"
+    {
+        this->startTime_ = startTime;
+        this->offTime_ = offTime;
+        // logger<< "DEBUG: set ${DEVICENAME} off | reset time | reset all" << std::endl;
+    }
+    else
+        logger<< "Impossibile settare il timer" << std::endl;
+
 }
 
 // Calcola la produzione/consumo energetico di uno specifico dispositivo.
