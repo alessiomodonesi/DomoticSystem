@@ -21,7 +21,7 @@ bool DomoticDevice::turnOn(void)
     }
     else
     {
-        std::cerr << "Il dispositivo è già acceso" << std::endl;
+        logger << "Il dispositivo è già acceso" << std::endl;
         return false;
     }
 }
@@ -38,7 +38,7 @@ bool DomoticDevice::turnOff()
     }
     else
     {
-        std::cerr << "Il dispositivo è già spento" << std::endl;
+        logger<< "Il dispositivo è già spento" << std::endl;
         return false;
     }
 }
@@ -55,7 +55,7 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
             this->offTime_ = offTime;
         }
         else
-            std::cerr << "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
+            logger<< "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
     }
     else
     {

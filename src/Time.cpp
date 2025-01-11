@@ -26,12 +26,12 @@ void Time::setTime(int h, int m)
     // Controlla che ore e minuti siano validi
     if (h < 0 || h > 23)
     {
-        // std::cerr << "DEBUG: Orario non valido (ore): h = " << h << std::endl;
+        // logger << "DEBUG: Orario non valido (ore): h = " << h << std::endl;
         throw std::out_of_range("Le ore devono essere comprese tra 0 e 23.");
     }
     if (m < 0 || m > 59)
     {
-        // std::cerr << "DEBUG: Orario non valido (minuti): m = " << m << std::endl;
+        // logger << "DEBUG: Orario non valido (minuti): m = " << m << std::endl;
         throw std::out_of_range("I minuti devono essere compresi tra 0 e 59.");
     }
 

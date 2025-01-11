@@ -17,7 +17,7 @@ bool FixedCycleDevice::turnOn(void)
     }
     else
     {
-        std::cerr << "Il dispositivo è già acceso" << std::endl;
+        logger << "Il dispositivo è già acceso" << std::endl;
         return false;
     }
 }

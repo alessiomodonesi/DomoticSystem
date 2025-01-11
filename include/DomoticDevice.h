@@ -4,6 +4,8 @@
 #define DOMOTICDEVICE_H
 
 #include <iostream>
+
+#include "UnifiedLogger.h"
 #include "Time.h"
 
 // Classe base per rappresentare un dispositivo domotico generico.

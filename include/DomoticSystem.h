@@ -10,6 +10,7 @@
 #include <memory>
 #include <fstream>
 
+#include "UnifiedLogger.h"
 #include "Time.h"
 
 // Dichiarazione anticipata della classe DomoticDevice
