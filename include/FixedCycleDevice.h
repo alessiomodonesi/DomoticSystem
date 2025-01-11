@@ -16,7 +16,7 @@ public:
     FixedCycleDevice(const std::string &name, double powerConsumption, int cycleDuration);
 
     // Metodo per accendere il dispositivo. Gestisce anche lo stato interno.
-    void turnOn(void) override;
+    bool turnOn(void) override;
 
     // Overloading del metodo per i dispositivi di tipo FixedCycle
     void setTimer(const Time &startTime);

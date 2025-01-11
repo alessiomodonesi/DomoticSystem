@@ -11,36 +11,64 @@ DomoticDevice::DomoticDevice(const std::string &name, double powerConsumption)
 DomoticDevice::~DomoticDevice() = default;
 
 // Metodo per accendere il dispositivo.
-void DomoticDevice::turnOn(void)
+bool DomoticDevice::turnOn(void)
 {
     if (!this->isOn_)
+    {
         this->isOn_ = true;
-
-    this->setTimer(NOW, this->offTime_);
+        this->setTimer(NOW, this->offTime_);
+        return true;
+    }
+    else
+    {
+        std::cerr << "Il dispositivo è già acceso" << std::endl;
+        return false;
+    }
 }
 
 // Metodo per spegnere il dispositivo.
-void DomoticDevice::turnOff()
+bool DomoticDevice::turnOff()
 {
     if (this->isOn_)
+    {
         this->isOn_ = false;
-
-    this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
-    this->setTimer(Time(-1, -1), Time(-1, -1));
+        this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
+        this->setTimer(Time(-1, -1), Time(-1, -1));
+        return true;
+    }
+    else
+    {
+        std::cerr << "Il dispositivo è già spento" << std::endl;
+        return false;
+    }
 }
 
 // Imposta l’orario di accensione e spegnimento per il dispositivo.
 void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
 {
-    this->startTime_ = startTime;
-    this->offTime_ = offTime;
+    if (offTime != Time(-1, -1))
+    {
+        // Controllo che startTime sia minore di offTime
+        if (startTime <= offTime)
+        {
+            this->startTime_ = startTime;
+            this->offTime_ = offTime;
+        }
+        else
+            std::cerr << "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
+    }
+    else
+    {
+        this->startTime_ = startTime;
+        this->offTime_ = offTime;
+    }
 }
 
-// // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
+// Calcola la produzione/consumo energetico di uno specifico dispositivo.
 double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Time &offTime) const
 {
     Time intervals = offTime - startTime;
-    double usedTime = intervals.getHours() + (intervals.getMinutes() / 60);
+    double usedTime = intervals.getHours() + (intervals.getMinutes() / 60); // Formato 1.5h = 1h 30m
     return this->powerConsumption_ * usedTime;
 }
 

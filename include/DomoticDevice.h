@@ -28,10 +28,10 @@ public:
     virtual ~DomoticDevice();
 
     // Metodo per accendere il dispositivo. Gestisce anche lo stato interno.
-    virtual void turnOn(void);
+    virtual bool turnOn(void);
 
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
-    void turnOff(void);
+    bool turnOff(void);
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);

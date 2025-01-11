@@ -7,12 +7,19 @@ FixedCycleDevice::FixedCycleDevice(const std::string &name, double powerConsumpt
     : DomoticDevice(name, powerConsumption), cycleDuration_(cycleDuration) {}
 
 // Metodo per accendere il dispositivo.
-void FixedCycleDevice::turnOn(void)
+bool FixedCycleDevice::turnOn(void)
 {
     if (!this->isOn_)
+    {
         this->isOn_ = true;
-
-    this->setTimer(NOW);
+        this->setTimer(NOW);
+        return true;
+    }
+    else
+    {
+        std::cerr << "Il dispositivo è già acceso" << std::endl;
+        return false;
+    }
 }
 
 // Setta l'offTime del device di tipo FixedCycle con l'ausilio della struct Time

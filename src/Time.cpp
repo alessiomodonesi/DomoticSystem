@@ -25,9 +25,15 @@ void Time::setTime(int h, int m)
 
     // Controlla che ore e minuti siano validi
     if (h < 0 || h > 23)
+    {
+        // std::cerr << "DEBUG: Orario non valido (ore): h = " << h << std::endl;
         throw std::out_of_range("Le ore devono essere comprese tra 0 e 23.");
+    }
     if (m < 0 || m > 59)
+    {
+        // std::cerr << "DEBUG: Orario non valido (minuti): m = " << m << std::endl;
         throw std::out_of_range("I minuti devono essere compresi tra 0 e 59.");
+    }
 
     // Imposta ore e minuti
     hours_ = h;
@@ -81,7 +87,7 @@ Time Time::toTime(const std::string &time) // Time deve essere in formato HH:MM
 {
     // Verifica se l'input è un orario valido
     if (!Time::isTime(time))
-        throw std::invalid_argument("Invalid time format: " + time);
+        throw std::invalid_argument("Formato del tempo invalido: " + time);
 
     // Estrae le ore e i minuti
     int h = std::stoi(time.substr(0, 2));
@@ -90,14 +96,17 @@ Time Time::toTime(const std::string &time) // Time deve essere in formato HH:MM
 }
 
 // HELPER FUNCTION
-
 Time operator-(const Time &a, const Time &b)
 {
-    int minA = (a.getHours() * 60) + a.getMinutes();
-    int minB = (b.getHours() * 60) + b.getMinutes();
-    int min = minB - minA;
-    int h = (int)min / 60;
-    int m = min - (h * 60);
+    int h = a.getHours() - b.getHours();
+    int m = a.getMinutes() - b.getMinutes();
+
+    if (m < 0) // Scambio 1 ora con 60 minuti
+    {
+        m += 60;
+        h -= 1;
+    }
+
     return Time(h, m);
 }
 
@@ -109,12 +118,28 @@ bool operator>(const Time &a, const Time &b)
         return a.getHours() > b.getHours();
 }
 
+bool operator>=(const Time &a, const Time &b)
+{
+    if (a.getHours() == b.getHours())
+        return a.getMinutes() >= b.getMinutes();
+    else
+        return a.getHours() >= b.getHours();
+}
+
 bool operator<(const Time &a, const Time &b)
 {
     if (a.getHours() == b.getHours())
         return a.getMinutes() < b.getMinutes();
     else
         return a.getHours() < b.getHours();
+}
+
+bool operator<=(const Time &a, const Time &b)
+{
+    if (a.getHours() == b.getHours())
+        return a.getMinutes() <= b.getMinutes();
+    else
+        return a.getHours() <= b.getHours();
 }
 
 bool operator==(const Time &a, const Time &b)

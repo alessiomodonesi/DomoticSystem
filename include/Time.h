@@ -36,7 +36,9 @@ struct Time
 // HELPER FUNCTION
 Time operator-(const Time &a, const Time &b);
 bool operator>(const Time &a, const Time &b);
+bool operator>=(const Time &a, const Time &b);
 bool operator<(const Time &a, const Time &b);
+bool operator<=(const Time &a, const Time &b);
 bool operator==(const Time &a, const Time &b);
 bool operator!=(const Time &a, const Time &b);
 std::ostream &operator<<(std::ostream &os, const Time &obj);
