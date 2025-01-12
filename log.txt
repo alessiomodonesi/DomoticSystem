@@ -1,0 +1,34 @@
+>> set Lavatrice 01:00
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Lavatrice dalle 01:00
+>> set time 02:00
+[00:00] L'orario attuale è 00:00
+[01:00] Il dispositivo Lavatrice si è acceso
+[02:00] L'orario attuale è 02:00
+>> show Lavatrice
+[02:00] L'orario attuale è 02:00
+[02:00] Il dispositivo Lavatrice oggi ha consumato -2 kWh
+>> set time 03:00
+[02:00] L'orario attuale è 02:00
+[02:50] Il dispositivo Lavatrice si è spento
+[03:00] L'orario attuale è 03:00
+>> show Lavatrice
+[03:00] L'orario attuale è 03:00
+[03:00] Il dispositivo Lavatrice oggi ha consumato -3.66667 kWh
+>> set Lavatrice 13:00
+[03:00] L'orario attuale è 03:00
+[03:00] Impostato un timer per il dispositivo Lavatrice dalle 13:00
+>> reset time
+[00:00] L'orario attuale è 00:00
+[00:00] Tutti i dispositivi sono stati ripristinati
+>> show Lavatrice
+[00:00] L'orario attuale è 00:00
+[00:00] Il dispositivo Lavatrice oggi ha consumato 0 kWh
+>> set time 15:00
+[00:00] L'orario attuale è 00:00
+[13:00] Il dispositivo Lavatrice si è acceso
+[14:50] Il dispositivo Lavatrice si è spento
+[15:00] L'orario attuale è 15:00
+>> show Lavatrice
+[15:00] L'orario attuale è 15:00
+[15:00] Il dispositivo Lavatrice oggi ha consumato -3.66667 kWh

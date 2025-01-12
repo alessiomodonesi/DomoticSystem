@@ -42,6 +42,13 @@ bool DomoticDevice::turnOff()
     }
 }
 
+// AGGIUNTA
+void DomoticDevice::simplifiedTurnOff(void)
+{
+    if (this->isOn_)
+        isOn_ = false;
+}
+
 // Imposta l’orario di accensione e spegnimento per il dispositivo.
 void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
 {
