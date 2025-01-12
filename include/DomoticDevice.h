@@ -35,7 +35,6 @@ public:
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
     bool turnOff(void);
 
-    // AGGIUNTA
     // Metodo per spegnere il dispositivo durante resetTime()
     void setIsOn(void) { isOn_ = false; };
 
