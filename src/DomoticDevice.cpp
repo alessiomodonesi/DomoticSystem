@@ -84,19 +84,19 @@ double DomoticDevice::calculateEnergyConsumption(const Time &startTime) const
 // Ritorna lo stato del dispositivo in formato leggibile.
 std::ostream &operator<<(std::ostream &os, const DomoticDevice &device)
 {
-    os << "ID: " << device.getId()
+    os << "\nID: " << device.getId()
        << "\nNome: " << device.getName()
        << "\nStato: " << (device.isDeviceOn() ? "Acceso" : "Spento");
 
     if (device.getPowerConsumption() > 0)
     {
         os << "\nPotenza Prodotta: " << device.getPowerConsumption() << " kW";
-        os << "\nEnergia Giornaliera Prodotta: " << device.getDailyConsumption() << " kWh\n";
+        os << "\nEnergia Giornaliera Prodotta: " << device.getDailyConsumption() << " kWh";
     }
     else
     {
         os << "\nPotenza Consumata: " << device.getPowerConsumption() << " kW";
-        os << "\nEnergia Giornaliera Consumata: " << device.getDailyConsumption() << " kWh\n";
+        os << "\nEnergia Giornaliera Consumata: " << device.getDailyConsumption() << " kWh";
     }
     return os;
 }

@@ -1,0 +1,20 @@
+>> set "Pompa di calore" 07:00 07:30
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Pompa di calore dalle 07:00 alle 07:30
+>> set Lavatrice 18:00
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Lavatrice dalle 18:00
+>> set time 08:50
+[00:00] L'orario attuale è 00:00
+[07:00] Il dispositivo Pompa di calore si è acceso
+[07:30] Il dispositivo Pompa di calore si è spento
+[08:50] L'orario attuale è 08:50
+>> set time 19:15
+[08:50] L'orario attuale è 08:50
+[18:00] Il dispositivo Lavatrice si è acceso
+[19:15] L'orario attuale è 19:15
+>> set time 20:45
+[19:15] L'orario attuale è 19:15
+[19:50] Il dispositivo Lavatrice si è spento
+[20:45] L'orario attuale è 20:45
+>> exit

@@ -1,7 +1,5 @@
 // @author Alessio Modonesi
 
-#include <sstream>
-
 #include "DomoticSystem.h"
 #include "FixedCycleDevice.h"
 
@@ -100,8 +98,10 @@ std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<Dom
             dailySystemConsumption += device->getDailyConsumption(); // Somma il consumo energetico
     }
 
-    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemConsumption << " kWh\n"
-       << "Nello specifico:" << "\n\n";
+    os << "Valori attuali del sistema:\n"
+       << "Produzione energetica: " << dailySystemProduction << " kWh\n"
+       << "Consumo energetico: " << dailySystemConsumption << " kWh\n\n"
+       << "Nello specifico:" << "\n";
 
     for (const auto &device : devices_)
         os << *device << "\n"; // Usa l'overload di << per DomoticDevice
@@ -132,8 +132,6 @@ void DomoticSystem::initializeCommands(void)
 
                         for (int m = startMinute; m <= endMinute; ++m)
                         {
-                            // logger << "DEBUG: h = " << h << ", m = " << m << std::endl;
-
                             try
                             {
                                 NOW.setTime(h, m); // Aggiorna l'orario
@@ -144,6 +142,7 @@ void DomoticSystem::initializeCommands(void)
                                        << ", m = " << m << ". Messaggio: " << e.what() << std::endl;
                                 return;
                             }
+
                             // Controlla lo stato di ogni dispositivo e aggiorna in base all'orario corrente
                             for (const auto &device : devices_)
                             {
@@ -399,7 +398,7 @@ void DomoticSystem::initializeCommands(void)
     this->commands_["clear"] = [this](const std::vector<std::string> &params)
     {
         if (system("clear") != 0)
-            logger << "Warning: il comando 'clear' non è stato eseguito correttamente" << std::endl;
+            logger << "Warning: il comando \"clear\" non è stato eseguito correttamente" << std::endl;
     };
     this->commands_["exit"] = [this](const std::vector<std::string> &params)
     { exit(0); };
@@ -410,7 +409,7 @@ void DomoticSystem::executeCommand(const std::string &input)
 {
     std::string command;             // Comando principale (es. "set", "show")
     std::vector<std::string> params; // Parametri del comando
-    std::string prev;                // Parametro precedente
+    std::string previous;            // Parametro precedente
 
     // Usa un istringstream per analizzare la stringa di input
     std::istringstream stream(input);
@@ -432,9 +431,9 @@ void DomoticSystem::executeCommand(const std::string &input)
         else
             stream >> param; // Legge un parametro "normale"
 
-        // Rimuove eventuali
-        if (prev != param)
-            prev = param;
+        // Rimuove eventuali parametri duplicati
+        if (previous != param)
+            previous = param;
         else
             continue;
 

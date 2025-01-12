@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <memory>
 #include <fstream>
+#include <sstream>
 
 #include "Logger.h"
 #include "Time.h"
