@@ -1,5 +1,0 @@
->> set Lavatrice on
-Comando non valido per il dispositivo Lavatrice
->> set Lavastoviglie on
-Comando non valido per il dispositivo Lavastoviglie
->> exit
