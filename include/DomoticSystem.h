@@ -34,7 +34,7 @@ private:
     double calculateCurrentConsumption(void) const;
 
     // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
-    std::vector<std::string>  handleOverConsumption(void);
+    std::vector<std::string> handleOverConsumption(void);
 
 public:
     // Costruttore: inizializza il sistema con un limite massimo di potenza.
