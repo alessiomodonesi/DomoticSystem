@@ -1,2 +1,0 @@
-- nel costruttore dei due dispositivi, quando si assegna l'ID controllare che non ci siano già dispositivi dello stesso tipo con quell'ID
-- nel sistema forse bisogna inserire un metodo per andare avanti con il tempo (ogni volta che viene chiamato bisogna controllare se si ha superato il limite di potenza)
