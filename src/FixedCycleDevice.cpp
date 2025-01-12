@@ -32,6 +32,5 @@ void FixedCycleDevice::setTimer(const Time &startTime)
 // Interrompe manualmente un ciclo in corso.
 void FixedCycleDevice::stopCycle(void)
 {
-    this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
     setOffTime(Time(-1, -1));
 }
