@@ -32,7 +32,11 @@ bool DomoticDevice::turnOff()
     if (this->isOn_)
     {
         this->isOn_ = false;
-        // this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());
+
+
+        // this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());    // AGGIUNTA (era commentata)
+        
+        
         this->setTimer(Time(-1, -1), Time(-1, -1));
         return true;
     }

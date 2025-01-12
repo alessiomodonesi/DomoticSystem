@@ -1,0 +1,4 @@
+>> set Lavatrice on
+Comando non valido per il dispositivo Lavatrice
+>> set Lavatrice 01:00
+Comando non valido per il dispositivo Lavatrice
