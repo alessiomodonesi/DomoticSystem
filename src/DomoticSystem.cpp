@@ -486,7 +486,7 @@ void DomoticSystem::resetTime(void)
         device->setDailyConsumption(0.0);
         if (device->isDeviceOn())
         {
-            device->simplifiedTurnOff();
+            device->setIsOn();
         }
     }
 

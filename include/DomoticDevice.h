@@ -37,7 +37,7 @@ public:
 
     // AGGIUNTA
     // Metodo per spegnere il dispositivo durante resetTime()
-    void simplifiedTurnOff(void);
+    void setIsOn(void) { isOn_ = false; };
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);
