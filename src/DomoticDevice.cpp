@@ -37,7 +37,7 @@ bool DomoticDevice::turnOff()
     }
     else
     {
-        logger<< "Il dispositivo è già spento" << std::endl;
+        logger << "Il dispositivo è già spento" << std::endl;
         return false;
     }
 }
@@ -55,9 +55,9 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
             // logger<< "DEBUG: set ${DEVICENAME} ${START} ${STOP}" << std::endl;
         }
         else
-            logger<< "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
+            logger << "L'orario di accensione deve essere precedente a quello di spegnimento" << std::endl;
     }
-    else if (startTime != Time(-1, -1) &&  offTime == Time(-1, -1))// Chiamata del tipo "set ${DEVICENAME} on", "set ${DEVICENAME} ${START}"
+    else if (startTime != Time(-1, -1) && offTime == Time(-1, -1)) // Chiamata del tipo "set ${DEVICENAME} on", "set ${DEVICENAME} ${START}"
     {
         this->startTime_ = startTime;
         this->offTime_ = offTime;
@@ -70,7 +70,7 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
         // logger<< "DEBUG: set ${DEVICENAME} off | reset time | reset all" << std::endl;
     }
     else
-        logger<< "Impossibile settare il timer" << std::endl;
+        logger << "Impossibile settare il timer" << std::endl;
 }
 
 // Calcola la produzione/consumo energetico di uno specifico dispositivo durante l'ultima accensione.

@@ -29,7 +29,7 @@ int main()
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Microonde", -0.8, 2)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Asciugatrice", -0.5, 60)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisione", -0.2, 60)));
-    
+
     // Creazione dell'input per l'utente
     std::string input;
     while (true)

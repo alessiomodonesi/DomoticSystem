@@ -33,7 +33,7 @@ public:
     virtual bool turnOn(void);
 
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
-    bool turnOff(void);    
+    bool turnOff(void);
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);
