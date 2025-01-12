@@ -1,0 +1,1 @@
+Per implementare il sistema domotico richiesto abbiamo deciso di implementare 
