@@ -19,37 +19,39 @@ DomoticSystem::DomoticSystem(double powerConsumption)
 // Calcola il consumo corrente sommando i consumi di tutti i dispositivi accesi.
 double DomoticSystem::calculateCurrentConsumption(void) const
 {
-    double totalConsumption = 0;
+    double totalConsumption = 0.0;
     for (const auto &device : this->devices_)
     {
         if (device->isDeviceOn())
             totalConsumption += device->getPowerConsumption();
     }
+    logger << "DEBUG: il consumo attuale del sistema è: " << totalConsumption << std::endl;
     return totalConsumption;
 }
-
-// Function object per il predicato del find_if nel metodo successivo
-class overConsumption
-{
-public:
-    bool operator()(const std::unique_ptr<DomoticDevice> &device) const
-    {
-        return device->isDeviceOn(); // Accede all'oggetto puntato senza copiarlo
-    }
-};
 
 // Gestisce situazioni di sovraccarico spegnendo i dispositivi in ordine inverso.
 void DomoticSystem::handleOverConsumption(void)
 {
-    while (calculateCurrentConsumption() > this->maxPowerConsumption_)
+    while (calculateCurrentConsumption() < -(this->maxPowerConsumption_))
     {
-        auto it = std::find_if(this->devices_.rbegin(), this->devices_.rend(), overConsumption());
-        // rbegin e rend (reverse) servono per cercare in senso invertito, dato che quando si spegne un dispositivo si parte dall'ultimo acceso
+        int i = 0; // Indico il primo dispositivo come quello iniziale.
+        int currentIndex = 0; // Indice attuale nel loop.
 
-        if (it != this->devices_.rend())
-            (*it)->turnOff(); // Accedi all'oggetto puntato dal unique_ptr.
-        else
-            logger << "L'overconsumption non può essere risolta: tutti i dispositivi sono spenti" << std::endl;
+        for (const auto &device : this->devices_)
+        {
+            if (device->isDeviceOn()) // Se trovo un dispositivo acceso.
+            {
+                if (device->getStartTime() < this->devices_[i]->getStartTime()) // Se il tempo di avvio è minore.
+                    i = currentIndex; // Aggiorno l'indice del dispositivo con tempo di avvio minore.
+            }
+            ++currentIndex; // Incremento l'indice.
+        }
+        
+        if (this->devices_[i]->getPowerConsumption() < 0)
+        {
+            logger << "DEBUG: spengo il device: " << this->devices_[i]->getName() << std::endl;
+            this->devices_[i]->turnOff();
+        }
     }
 }
 
@@ -154,7 +156,10 @@ void DomoticSystem::initializeCommands(void)
                                     if (device->getOffTime().getHours() == h && device->getOffTime().getMinutes() == m)
                                     {
                                         if (device->turnOff())
+                                        {
+                                            handleOverConsumption();
                                             logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
+                                        }    
                                     }
                                 }
                                 else
@@ -163,7 +168,10 @@ void DomoticSystem::initializeCommands(void)
                                     if (device->getStartTime().getHours() == h && device->getStartTime().getMinutes() == m)
                                     {
                                         if (device->turnOn())
+                                        {
+                                            handleOverConsumption();
                                             logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                                        }    
                                     }
                                 }
                             }
@@ -188,13 +196,19 @@ void DomoticSystem::initializeCommands(void)
                     {
                         logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         if (device->turnOn())
+                        {
+                            handleOverConsumption();
                             logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                        }
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
                     {
                         logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         if (device->turnOff())
+                        {
+                            handleOverConsumption();
                             logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è spento" << std::endl;
+                        }   
                     }
                     else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un dispositivo.
                     {
@@ -430,8 +444,10 @@ void DomoticSystem::resetTime(void)
 
     for (const auto &device : this->devices_)
     {
-        if (device->isDeviceOn())
+        if (device->isDeviceOn()){
             device->turnOff();
+            handleOverConsumption();
+        }
 
         device->setDailyConsumption(0);
     }
