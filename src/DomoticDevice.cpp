@@ -34,7 +34,7 @@ bool DomoticDevice::turnOff()
         this->isOn_ = false;
 
 
-        // this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());    // AGGIUNTA (era commentata)
+        this->dailyConsumption_ += calculateEnergyConsumption(getStartTime(), getOffTime());    // AGGIUNTA (era commentata)
         
         
         this->setTimer(Time(-1, -1), Time(-1, -1));
@@ -79,7 +79,7 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
 
 }
 
-// Calcola la produzione/consumo energetico di uno specifico dispositivo.
+// Calcola la produzione/consumo energetico di uno specifico dispositivo durante l'ultima accensione.
 double DomoticDevice::calculateEnergyConsumption(const Time &startTime, const Time &offTime) const
 {
     Time intervals = offTime - startTime;
