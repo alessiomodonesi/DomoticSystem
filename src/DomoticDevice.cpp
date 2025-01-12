@@ -78,7 +78,6 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
     }
     else
         logger<< "Impossibile settare il timer" << std::endl;
-
 }
 
 // Calcola la produzione/consumo energetico di uno specifico dispositivo durante l'ultima accensione.
