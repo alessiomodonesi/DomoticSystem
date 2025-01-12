@@ -97,7 +97,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<std::unique_ptr<Dom
             dailySystemConsumption += device->getDailyConsumption(); // Somma il consumo energetico
     }
 
-    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemProduction << " kWh\n"
+    os << "Attualmente il sistema ha prodotto " << dailySystemProduction << " kWh e consumato " << dailySystemConsumption << " kWh\n"
        << "Nello specifico:" << "\n\n";
 
     for (const auto &device : devices_)
@@ -147,6 +147,9 @@ void DomoticSystem::initializeCommands(void)
                                 // Controlla se il dispositivo è acceso
                                 if (device->isDeviceOn())
                                 {
+                                    // Calcola il consumo/produzione giornaliera di un dispositivo dall'accensione fino ad adesso
+                                    device->setDailyConsumption(device->calculateEnergyConsumption(device->getStartTime()));
+
                                     // Spegni il dispositivo se l'orario attuale corrisponde a "offTime"
                                     if (device->getOffTime().getHours() == h && device->getOffTime().getMinutes() == m)
                                     {

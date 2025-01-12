@@ -17,7 +17,7 @@ protected:
     const std::size_t id_;          // ID univoco del dispositivo
     const std::string name_;        // Nome del dispositivo
     const double powerConsumption_; // Potenza consumata (negativa) o prodotta (positiva)
-    double dailyConsumption_;       // Consumo energetico totale dalle ore 00:00
+    double dailyConsumption_{0.0};       // Consumo energetico totale dalle ore 00:00
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
     Time startTime_{-1, -1};        // Orario di accensione automatica
     Time offTime_{-1, -1};          // Orario di spegnimento automatico (opzionale)
@@ -36,7 +36,7 @@ public:
     bool turnOff(void);
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
-    void setTimer(const Time &startTime, const Time &offTime);
+    void setTimer(const Time &startTime);
 
     // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
     // Chiarimento: Il consumo viene calcolato considerando un assorbimento costante.
@@ -52,7 +52,7 @@ public:
     Time getOffTime(void) const { return offTime_; }
 
     // Setter per dailyConsumption_, startTime_ and offTime_
-    void setDailyConsumption(int dailyConsumption) { dailyConsumption_ = dailyConsumption; }
+    void setDailyConsumption(double dailyConsumption) { dailyConsumption_ = dailyConsumption; }
     void setStartTime(Time startTime) { startTime_ = startTime; }
     void setOffTime(Time offTime) { offTime_ = offTime; }
 };
