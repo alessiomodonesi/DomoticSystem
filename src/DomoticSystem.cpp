@@ -25,7 +25,6 @@ double DomoticSystem::calculateCurrentConsumption(void) const
         if (device->isDeviceOn())
             totalConsumption += device->getPowerConsumption();
     }
-    logger << "DEBUG: il consumo attuale del sistema è: " << totalConsumption << std::endl;
     return totalConsumption;
 }
 
@@ -39,19 +38,20 @@ void DomoticSystem::handleOverConsumption(void)
 
         for (const auto &device : this->devices_)
         {
-            if (device->isDeviceOn()) // Se trovo un dispositivo acceso.
+            if (device->isDeviceOn() && device->getPowerConsumption() < 0) // Se trovo un dispositivo acceso che stia consumando energia.
             {
-                if (device->getStartTime() < this->devices_[i]->getStartTime()) // Se il tempo di avvio è minore.
+                // Ed il tempo di avvio è minore di quello precendente 
+                if (device->getStartTime() <= this->devices_[i]->getStartTime())
+                {
+                    logger << "DEBUG: il device con tempo di avvio minore è: " << this->devices_[i]->getName() << std::endl;
                     i = currentIndex; // Aggiorno l'indice del dispositivo con tempo di avvio minore.
+                }
             }
             ++currentIndex; // Incremento l'indice.
         }
         
-        if (this->devices_[i]->getPowerConsumption() < 0)
-        {
-            logger << "DEBUG: spengo il device: " << this->devices_[i]->getName() << std::endl;
-            this->devices_[i]->turnOff();
-        }
+        logger << "DEBUG: spengo il device: " << this->devices_[i]->getName() << std::endl;
+        this->devices_[i]->turnOff();
     }
 }
 
@@ -197,8 +197,8 @@ void DomoticSystem::initializeCommands(void)
                         logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         if (device->turnOn())
                         {
-                            handleOverConsumption();
                             logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                            handleOverConsumption();
                         }
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo

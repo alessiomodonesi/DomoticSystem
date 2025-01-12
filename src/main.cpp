@@ -30,6 +30,12 @@ int main()
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Asciugatrice", -0.5, 60)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisione", -0.2, 60)));
 
+    system.executeCommand("set \"Impianto fotovoltaico\" on");
+    system.executeCommand("set \"Pompa di calore\" on");
+    system.executeCommand("set Lavatrice on");
+    system.executeCommand("set Scaldabagno on");
+    system.executeCommand("set Televisione on");
+    
     // Creazione dell'input per l'utente
     std::string input;
     while (true)
@@ -44,5 +50,6 @@ int main()
         // Esegue il comando
         system.executeCommand(input);
     }
+
     return 0;
 }
