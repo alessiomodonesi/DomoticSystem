@@ -1,4 +1,4 @@
-// @author Alessio Modonesi
+// @author
 
 #ifndef TIME_H
 #define TIME_H

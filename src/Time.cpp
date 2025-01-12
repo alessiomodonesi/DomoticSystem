@@ -1,4 +1,4 @@
-// @author Alessio Modonesi
+// @author
 
 #include <iostream>
 #include "Time.h"

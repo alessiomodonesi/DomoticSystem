@@ -1,4 +1,4 @@
-// @author Tommaso Silvestrin
+// @author Alessio Modonesi
 
 #ifndef DOMOTICSYSTEM_H
 #define DOMOTICSYSTEM_H

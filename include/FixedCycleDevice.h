@@ -1,4 +1,4 @@
-// @author David Popusoi
+// @author
 
 #ifndef FIXEDCYCLEDEVICE_H
 #define FIXEDCYCLEDEVICE_H

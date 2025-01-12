@@ -1,4 +1,4 @@
-// @author Alessio Modonesi
+// @author
 
 #ifndef DOMOTICDEVICE_H
 #define DOMOTICDEVICE_H
@@ -17,7 +17,7 @@ protected:
     const std::size_t id_;          // ID univoco del dispositivo
     const std::string name_;        // Nome del dispositivo
     const double powerConsumption_; // Potenza consumata (negativa) o prodotta (positiva)
-    double dailyConsumption_{0.0};       // Consumo energetico totale dalle ore 00:00
+    double dailyConsumption_{0.0};  // Consumo energetico totale dalle ore 00:00
     bool isOn_{false};              // Stato del dispositivo: acceso o spento
     Time startTime_{-1, -1};        // Orario di accensione automatica
     Time offTime_{-1, -1};          // Orario di spegnimento automatico (opzionale)
@@ -33,10 +33,7 @@ public:
     virtual bool turnOn(void);
 
     // Metodo per spegnere il dispositivo. Può essere sovrascritto da classi derivate.
-    bool turnOff(void);
-
-    // Metodo per spegnere il dispositivo durante resetTime()
-    void setIsOn(void) { isOn_ = false; };
+    bool turnOff(void);    
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
     void setTimer(const Time &startTime, const Time &offTime);
@@ -54,7 +51,8 @@ public:
     Time getStartTime(void) const { return startTime_; }
     Time getOffTime(void) const { return offTime_; }
 
-    // Setter per dailyConsumption_, startTime_ and offTime_
+    // Setter per isOn_, startTime_, offTime_,ailyConsumption_
+    void setIsOn(bool status) { isOn_ = status; };
     void setDailyConsumption(double dailyConsumption) { dailyConsumption_ = dailyConsumption; }
     void setStartTime(Time startTime) { startTime_ = startTime; }
     void setOffTime(Time offTime) { offTime_ = offTime; }

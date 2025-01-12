@@ -1,4 +1,4 @@
-// @author David Popusoi
+// @author
 
 #include "FixedCycleDevice.h"
 

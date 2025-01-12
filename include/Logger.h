@@ -1,4 +1,4 @@
-// @author Alessio Modonesi
+// @author
 
 #ifndef LOGGER_H
 #define LOGGER_H
