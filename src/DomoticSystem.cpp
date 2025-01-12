@@ -369,6 +369,7 @@ void DomoticSystem::executeCommand(const std::string &input)
 {
     std::string command;             // Comando principale (es. "set", "show")
     std::vector<std::string> params; // Parametri del comando
+    std::string prev;                // Parametro precedente
 
     // Usa un istringstream per analizzare la stringa di input
     std::istringstream stream(input);
@@ -390,6 +391,12 @@ void DomoticSystem::executeCommand(const std::string &input)
         else
             stream >> param; // Legge un parametro "normale"
 
+        // Rimuove eventuali 
+        if (prev != param)
+            prev = param; 
+        else
+            continue;
+        
         params.push_back(param); // Aggiunge il parametro al vettore
     }
 

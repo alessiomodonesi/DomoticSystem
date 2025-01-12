@@ -36,11 +36,11 @@ public:
     bool turnOff(void);
 
     // Imposta l’orario di accensione e spegnimento per il dispositivo.
-    void setTimer(const Time &startTime);
+    void setTimer(const Time &startTime, const Time &offTime);
 
     // Mostra a schermo (calcola) la produzione/consumo energetico di uno specifico dispositivo.
     // Chiarimento: Il consumo viene calcolato considerando un assorbimento costante.
-    double calculateEnergyConsumption(const Time &startTime, const Time &offTime) const;
+    double calculateEnergyConsumption(const Time &startTime) const;
 
     // Getter per ID, nome, potenza, stato ed orario e consumo energetico totale dalle 00:00.
     std::size_t getId(void) const { return id_; }

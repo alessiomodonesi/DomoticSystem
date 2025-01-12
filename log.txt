@@ -1,4 +1,0 @@
->> set Lavatrice on
-DEBUG: setComando non valido per il dispositivo Lavatrice
->> exit
-DEBUG: exit
