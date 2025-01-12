@@ -473,7 +473,7 @@ void DomoticSystem::resetTime(void)
     for (const auto &device : this->devices_)
     {
         if (device->isDeviceOn())
-            device->turnOff();
+            device->turnOff();  // SBAGLIATO!
 
         device->setDailyConsumption(0.0);
     }
