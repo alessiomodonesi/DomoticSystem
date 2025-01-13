@@ -4,11 +4,11 @@
 - [Popusoi David](https://github.com/davidpopusoi)
 - [Silvestrin Tommaso](https://github.com/tommasosilvestrin)
 
-Cosa ha sviluppato **Modonesi Alessio**:
+Cosa ha sviluppato **Modonesi Alessio**: class DomoticSystem, main.cpp.
 
-Cosa ha sviluppato **Silvestrin Tommaso**:
+Cosa ha sviluppato **Popusoi David**: class FixedCycleDevice, struct Time.
 
-Cosa ha sviluppato **Popusoi David**:
+Cosa ha sviluppato **Silvestrin Tommaso**: class DomoticDevice, class Logger.
 
 ## Come compilare con Cmake
 >
