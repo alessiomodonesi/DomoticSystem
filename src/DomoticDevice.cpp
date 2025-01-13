@@ -1,4 +1,4 @@
-// @author
+// @author Tommaso Silvestrin
 
 #include <iostream>
 #include "DomoticDevice.h"

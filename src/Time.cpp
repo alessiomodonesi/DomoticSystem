@@ -1,4 +1,4 @@
-// @author
+// @author David Popusoi
 
 #include <iostream>
 #include "Time.h"

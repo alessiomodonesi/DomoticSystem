@@ -1,4 +1,4 @@
-// @author
+// @author Tommaso Silvestrin
 
 #ifndef DOMOTICDEVICE_H
 #define DOMOTICDEVICE_H

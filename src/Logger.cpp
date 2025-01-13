@@ -1,4 +1,4 @@
-// @author
+// @author Tommaso Silvestrin
 
 #include "Logger.h"
 

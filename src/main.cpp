@@ -1,4 +1,4 @@
-// @author
+// @author Alessio Modonesi
 
 #include <iostream>
 #include <memory>
