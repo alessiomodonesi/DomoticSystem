@@ -1,8 +1,8 @@
 ## Membri del gruppo
 
-- Modonesi Alessio
-- Popusoi David
-- Silvestrin Tommaso
+- [Modonesi Alessio](https://github.com/alessiomodonesi)
+- [Popusoi David](https://github.com/davidpopusoi)
+- [Silvestrin Tommaso](https://github.com/tommasosilvestrin)
 
 Cosa ha sviluppato **Modonesi Alessio**: class DomoticSystem, main.cpp.
 
