@@ -37,7 +37,8 @@ std::vector<std::string> DomoticSystem::handleOverConsumption(void)
 
         for (int i = 0; i < this->devices_.size(); i++)
         {
-            if (this->devices_[i]->isDeviceOn() && this->devices_[i]->getPowerConsumption() < 0) // Se il device è acceso e sta consumando energia
+            // Se il device è acceso, per costruzione consuma energia e non è importante come il Frigorifero.
+            if (this->devices_[i]->isDeviceOn() && this->devices_[i]->getPowerConsumption() < 0 && this->devices_[i]->getId() != std::hash<std::string>{}("Frigorifero"))
             {
                 // Ed il tempo di avvio è minore di quello precedente
                 if (this->devices_[i]->getStartTime() <= minStartTime)
@@ -222,7 +223,7 @@ void DomoticSystem::initializeCommands(void)
 
                             // Stampo tutti i dispositivi spenti
                             for (const std::string &name : turnedOffDevices)
-                                logger << "[" << NOW << "] " << name << " non è stato acceso per rispettare il limite di potenza" << std::endl;
+                                logger << "[" << NOW << "] " << name << " è stato spento per rispettare il limite di potenza" << std::endl;
                         }
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
