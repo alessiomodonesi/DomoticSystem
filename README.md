@@ -51,6 +51,9 @@ Per l'esecuzione:
 
 - Nel file [log.txt](./log.txt) vengono salvati comandi di input e risposte del programma;
 
-- Sono presenti 3 file di log contenenti un esempio di esecuzione[ex1.txt](./doc/ex1.txt)[ex2.txt](./doc/ex2.txt) [ex3.txt](./doc/ex3.txt);
+- Sono presenti 3 file di log contenenti un esempio di esecuzione:
+  - [ex1.txt](./doc/ex1.txt)
+  - [ex2.txt](./doc/ex2.txt)
+  - [ex3.txt](./doc/ex3.txt)
 
 - Sono presenti inoltre i comandi "clear" e "exit" per semplificare l'utilizzo del programma.
