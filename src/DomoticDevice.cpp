@@ -63,7 +63,7 @@ void DomoticDevice::setTimer(const Time &startTime, const Time &offTime)
         this->offTime_ = offTime;
         // logger<< "DEBUG: set ${DEVICENAME} on | set ${DEVICENAME} ${START}" << std::endl;
     }
-    else if (startTime == Time(-1, -1) && offTime == Time(-1, -1)) // Chiamata del tipo "set ${DEVICENAME} off", "reset time", "reset all"
+    else if (startTime == Time(-1, -1) && offTime == Time(-1, -1)) // Chiamata del tipo "set ${DEVICENAME} off", "reset timer", "reset all"
     {
         this->startTime_ = startTime;
         this->offTime_ = offTime;

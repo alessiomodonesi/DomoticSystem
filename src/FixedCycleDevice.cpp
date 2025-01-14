@@ -32,5 +32,11 @@ void FixedCycleDevice::setTimer(const Time &startTime)
 // Interrompe manualmente un ciclo in corso.
 void FixedCycleDevice::stopCycle(void)
 {
-    setOffTime(Time(-1, -1));
+    if (this->isDeviceOn())
+        setOffTime(Time(-1, -1));
+    else
+    {
+        setStartTime(Time(-1, -1));
+        setOffTime(Time(-1, -1));
+    }
 }

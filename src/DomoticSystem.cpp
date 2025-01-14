@@ -32,22 +32,25 @@ std::vector<std::string> DomoticSystem::handleOverConsumption(void)
 
     while (calculateCurrentConsumption() < -(this->maxPowerConsumption_))
     {
-        int i = 0;            // Indico il primo dispositivo come quello iniziale.
-        int currentIndex = 0; // Indice attuale nel loop.
+        int index = 0;                    // Indico la posizione del device da spegnere.
+        Time minStartTime = Time(23, 59); // Qui salviamo il tempo di avvio minimo.
 
-        for (const auto &device : this->devices_)
+        for (int i = 0; i < this->devices_.size(); i++)
         {
-            if (device->isDeviceOn() && device->getPowerConsumption() < 0) // Se trovo un dispositivo acceso che stia consumando energia.
+            if (this->devices_[i]->isDeviceOn() && this->devices_[i]->getPowerConsumption() < 0) // Se il device è acceso e sta consumando energia
             {
                 // Ed il tempo di avvio è minore di quello precedente
-                if (device->getStartTime() <= this->devices_[i]->getStartTime())
-                    i = currentIndex; // Aggiorno l'indice del dispositivo con tempo di avvio minore.
+                if (this->devices_[i]->getStartTime() <= minStartTime)
+                {
+                    index = i;                                        // Aggiorno l'indice del dispositivo con tempo di avvio minore.
+                    minStartTime = this->devices_[i]->getStartTime(); // Aggiorno il tempo di avvio minimo.
+                }
             }
-            ++currentIndex; // Incremento l'indice.
         }
 
-        this->devices_[i]->turnOff();
-        turnedOffDevices.push_back(this->devices_[i]->getName()); // Aggiungo il dispositivo spento al vettore.
+        // logger << "[" << NOW << "] DEBUG: handleOverConsumption() ha scelto: " << this->devices_[index]->getName() << std::endl;
+        this->devices_[index]->turnOff();
+        turnedOffDevices.push_back(this->devices_[index]->getName()); // Aggiungo il dispositivo spento al vettore.
     }
 
     // Restituisco il vettore dei dispositivi che sono stati spenti
@@ -162,7 +165,7 @@ void DomoticSystem::initializeCommands(void)
 
                                             // Stampo tutti i dispositivi spenti
                                             for (const std::string &name : turnedOffDevices)
-                                                logger << "[" << NOW << "] OverConsumption: " << name << " è stato spento" << std::endl;
+                                                logger << "[" << NOW << "] " << name << " è stato spento per rispettare il limite di potenza" << std::endl;
                                         }
                                     }
                                 }
@@ -178,12 +181,10 @@ void DomoticSystem::initializeCommands(void)
                                             // Controllo se l'indice del dispositivo corrente non è tra quelli recentemente spenti
                                             if (std::find(turnedOffDevices.begin(), turnedOffDevices.end(), device->getName()) == turnedOffDevices.end())
                                                 logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
-                                            else
-                                                logger << "[" << NOW << "] Errore: impossibile accendere " << device->getName() << std::endl;
 
                                             // Stampo tutti i dispositivi spenti
                                             for (const std::string &name : turnedOffDevices)
-                                                logger << "[" << NOW << "] OverConsumption: " << name << " è stato spento" << std::endl;
+                                                logger << "[" << NOW << "] " << name << " è stato spento per rispettare il limite di potenza" << std::endl;
                                         }
                                     }
                                 }
@@ -192,6 +193,9 @@ void DomoticSystem::initializeCommands(void)
                             // Stampa finale alla fine del ciclo per l'ultimo minuto
                             if (h == targetTime.getHours() && m == endMinute)
                                 logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
+
+                            if (NOW == Time(23, 59))
+                                exit(0);
                         }
                     }
                 }
@@ -215,12 +219,10 @@ void DomoticSystem::initializeCommands(void)
                             // Controllo se l'indice del dispositivo corrente non è tra quelli recentemente spenti
                             if (std::find(turnedOffDevices.begin(), turnedOffDevices.end(), device->getName()) == turnedOffDevices.end())
                                 logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
-                            else
-                                logger << "[" << NOW << "] Errore: impossibile accendere " << device->getName() << std::endl;
 
                             // Stampo tutti i dispositivi spenti
                             for (const std::string &name : turnedOffDevices)
-                                logger << "[" << NOW << "] OverConsumption: " << name << " è stato spento" << std::endl;
+                                logger << "[" << NOW << "] " << name << " non è stato acceso per rispettare il limite di potenza" << std::endl;
                         }
                     }
                     else if (params[1] == "off") // set ${DEVICENAME} off, spegne il dispositivo
@@ -233,7 +235,7 @@ void DomoticSystem::initializeCommands(void)
 
                             // Stampo tutti i dispositivi spenti
                             for (const std::string &name : turnedOffDevices)
-                                logger << "[" << NOW << "] OverConsumption: " << name << " è stato spento" << std::endl;
+                                logger << "[" << NOW << "] " << name << " è stato spento per rispettare il limite di potenza" << std::endl;
                         }
                     }
                     else if (Time::isTime(params[1])) // set ${DEVICENAME} ${START}, imposta l’orario di accensione per un dispositivo.
@@ -246,13 +248,29 @@ void DomoticSystem::initializeCommands(void)
                             {
                                 logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                                 fixedDevice->setTimer(Time::toTime(params[1]));
-                                logger << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
+
+                                if (Time::toTime(params[1]) == NOW)
+                                {
+                                    fixedDevice->turnOn();
+                                    logger << "[" << NOW << "] Il dispositivo " << fixedDevice->getName() << " si è acceso" << std::endl;
+                                }
+                                else
+                                    logger << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName()
+                                           << " dalle " << Time::toTime(params[1]) << std::endl;
                             }
                             else
                             {
                                 logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                                 device->setTimer(Time::toTime(params[1]), Time(-1, -1)); // Notare che il terzo parametro è opzionale e solo usato per device manuali.
-                                logger << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName() << " dalle " << Time::toTime(params[1]) << std::endl;
+
+                                if (Time::toTime(params[1]) == NOW)
+                                {
+                                    device->turnOn();
+                                    logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                                }
+                                else
+                                    logger << "[" << NOW << "] Impostato un timer per il dispositivo " << device->getName()
+                                           << " dalle " << Time::toTime(params[1]) << std::endl;
                             }
                         }
                     }
@@ -278,14 +296,24 @@ void DomoticSystem::initializeCommands(void)
                         logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         device->setTimer(device->getStartTime(), Time::toTime(params[2]));
                         logger << "[" << NOW << "] Il dispositivo è già acceso, impostato un timer per il dispositivo "
-                               << device->getName() << " dalle " << device->getStartTime() << " alle " << Time::toTime(params[2]) << std::endl;
+                               << device->getName() << " alle " << Time::toTime(params[2]) << std::endl;
                     }
                     else
                     {
                         logger << "[" << NOW << "] L'orario attuale è " << NOW << std::endl;
                         device->setTimer(Time::toTime(params[1]), Time::toTime(params[2]));
-                        logger << "[" << NOW << "] Impostato un timer per il dispositivo "
-                               << device->getName() << " dalle " << Time::toTime(params[1]) << " alle " << Time::toTime(params[2]) << std::endl;
+
+                        if (Time::toTime(params[1]) == NOW)
+                        {
+                            device->turnOn();
+                            logger << "[" << NOW << "] Il dispositivo " << device->getName() << " si è acceso" << std::endl;
+                            logger << "[" << NOW << "] Impostato un timer per il dispositivo "
+                                   << device->getName() << " alle " << Time::toTime(params[2]) << std::endl;
+                        }
+                        else
+                            logger << "[" << NOW << "] Impostato un timer per il dispositivo "
+                                   << device->getName() << " dalle " << Time::toTime(params[1])
+                                   << " alle " << Time::toTime(params[2]) << std::endl;
                     }
                 }
             }
@@ -312,7 +340,11 @@ void DomoticSystem::initializeCommands(void)
                 }
                 else
                 {
-                    device->setOffTime(Time(-1, -1));
+                    if (device->isDeviceOn())
+                        device->setOffTime(Time(-1, -1));
+                    else
+                        device->setTimer(Time(-1, -1), Time(-1, -1));
+
                     logger << "[" << NOW << "] Rimosso il timer dal dispositivo " << device->getName() << std::endl;
                 }
             }

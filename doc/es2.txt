@@ -1,0 +1,116 @@
+>> set Lavastoviglie 01:00
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Lavastoviglie dalle 01:00
+>> set Lavatrice 01:05
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Lavatrice dalle 01:05
+>> set Televisione 01:15
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Televisione dalle 01:15
+>> set "Impianto fotovoltaico" 01:10 01:20
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Impianto fotovoltaico dalle 01:10 alle 01:20
+>> set time 01:30
+[00:00] L'orario attuale è 00:00
+[01:00] Il dispositivo Lavastoviglie si è acceso
+[01:05] Il dispositivo Lavatrice si è acceso
+[01:10] Il dispositivo Impianto fotovoltaico si è acceso
+[01:15] Il dispositivo Televisione si è acceso
+[01:20] Il dispositivo Impianto fotovoltaico si è spento
+[01:20] Lavastoviglie è stato spento per rispettare il limite di potenza
+[01:30] L'orario attuale è 01:30
+>> set time 02:30
+[01:30] L'orario attuale è 01:30
+[02:15] Il dispositivo Televisione si è spento
+[02:30] L'orario attuale è 02:30
+>> set time 03:00
+[02:30] L'orario attuale è 02:30
+[02:55] Il dispositivo Lavatrice si è spento
+[03:00] L'orario attuale è 03:00
+>> show
+[03:00] L'orario attuale è 03:00
+
+Valori attuali del sistema:
+Produzione energetica: 0.25 kWh
+Consumo energetico: -4.34167 kWh
+
+Nello specifico:
+
+ID: 13531106073472694221
+Nome: Impianto fotovoltaico
+Stato: Spento
+Potenza Prodotta: 1.5 kW
+Energia Giornaliera Prodotta: 0.25 kWh
+
+ID: 2203334275787503963
+Nome: Pompa di calore
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 9603990876938069059
+Nome: Scaldabagno
+Stato: Spento
+Potenza Consumata: -1 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 13795398373824917895
+Nome: Frigorifero
+Stato: Spento
+Potenza Consumata: -0.4 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 17650418933910698347
+Nome: Lavatrice
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: -3.66667 kWh
+
+ID: 14989406340407800936
+Nome: Lavastoviglie
+Stato: Spento
+Potenza Consumata: -1.5 kW
+Energia Giornaliera Consumata: -0.475 kWh
+
+ID: 15796354526268440711
+Nome: Tapparelle
+Stato: Spento
+Potenza Consumata: -0.3 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 3055865402851117076
+Nome: Microonde
+Stato: Spento
+Potenza Consumata: -0.8 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 12908450997280079023
+Nome: Asciugatrice
+Stato: Spento
+Potenza Consumata: -0.5 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 6046394178575075250
+Nome: Televisione
+Stato: Spento
+Potenza Consumata: -0.2 kW
+Energia Giornaliera Consumata: -0.2 kWh
+
+>> set Lavatrice 04:00 04:30
+Comando non valido per il dispositivo Lavatrice
+>> set Frigorifero 04:00 04:30
+[03:00] L'orario attuale è 03:00
+[03:00] Impostato un timer per il dispositivo Frigorifero dalle 04:00 alle 04:30
+>> set time 04:15
+[03:00] L'orario attuale è 03:00
+[04:00] Il dispositivo Frigorifero si è acceso
+[04:15] L'orario attuale è 04:15
+>> reset timers
+[04:15] Tutti i timer sono stati rimossi
+>> set time 04:30
+[04:15] L'orario attuale è 04:15
+[04:30] L'orario attuale è 04:30
+>> show Frigorifero
+[04:30] L'orario attuale è 04:30
+[04:30] Il dispositivo Frigorifero oggi ha consumato -0.2 kWh
+>> exit
