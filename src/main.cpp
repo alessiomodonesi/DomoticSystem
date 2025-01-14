@@ -11,7 +11,7 @@
 int main()
 {
     // Creazione del sistema domotico
-    DomoticSystem system(3.5); // 3.5 kW come soglia di potenza massima
+    DomoticSystem system; // 3.5 kW come soglia di potenza massima
 
     // Creazione ed aggiunta dei dispositivi al sistema domotico:
     // Impianto fotovoltaico
@@ -25,10 +25,10 @@ int main()
     // Dispositivi a ciclo prefissato (CP)
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Lavatrice", -2.0, 110)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Lavastoviglie", -1.5, 195)));
-    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Tapparelle", -0.3, 1)));
-    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Microonde", -0.8, 2)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Tapparelle elettriche", -0.3, 1)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Forno a microonde", -0.8, 2)));
     system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Asciugatrice", -0.5, 60)));
-    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisione", -0.2, 60)));
+    system.addDevice(std::unique_ptr<DomoticDevice>(new FixedCycleDevice("Televisore", -0.2, 60)));
 
     // Creazione dell'input per l'utente
     std::string input;

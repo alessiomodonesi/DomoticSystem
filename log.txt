@@ -1,6 +1,0 @@
->> set Lavatrice on
-[00:00] L'orario attuale è 00:00
-[00:00] Il dispositivo Lavatrice si è acceso
->> set Asciugatrice 00:01
-[00:00] L'orario attuale è 00:00
-[00:00] Impostato un timer per il dispositivo Asciugatrice dalle 00:01

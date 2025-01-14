@@ -1,0 +1,218 @@
+>> set Frigorifero on
+[00:00] L'orario attuale è 00:00
+[00:00] Il dispositivo Frigorifero si è acceso
+>> set "Pompa di calore" 08:00 09:00
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Pompa di calore dalle 08:00 alle 09:00
+>> set "Impianto fotovoltaico" 08:00 12:00
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Impianto fotovoltaico dalle 08:00 alle 12:00
+>> set "Tapparelle elettriche" 08:30
+[00:00] L'orario attuale è 00:00
+[00:00] Impostato un timer per il dispositivo Tapparelle elettriche dalle 08:30
+>> set time 08:00
+[00:00] L'orario attuale è 00:00
+[08:00] Il dispositivo Impianto fotovoltaico si è acceso
+[08:00] Il dispositivo Pompa di calore si è acceso
+[08:00] L'orario attuale è 08:00
+>> set "Forno a microonde" on
+[08:00] L'orario attuale è 08:00
+[08:00] Il dispositivo Forno a microonde si è acceso
+>> set time 08:05
+[08:00] L'orario attuale è 08:00
+[08:02] Il dispositivo Forno a microonde si è spento
+[08:05] L'orario attuale è 08:05
+>> set Lavatrice on
+[08:05] L'orario attuale è 08:05
+[08:05] Il dispositivo Lavatrice si è acceso
+>> set Asciugatrice 08:30
+[08:05] L'orario attuale è 08:05
+[08:05] Impostato un timer per il dispositivo Asciugatrice dalle 08:30
+>> set time 08:30
+[08:05] L'orario attuale è 08:05
+[08:30] Il dispositivo Tapparelle elettriche si è acceso
+[08:30] Il dispositivo Asciugatrice si è acceso
+[08:30] Pompa di calore è stato spento per rispettare il limite di potenza
+[08:30] L'orario attuale è 08:30
+>> set time 13:00
+[08:30] L'orario attuale è 08:30
+[08:31] Il dispositivo Tapparelle elettriche si è spento
+[09:30] Il dispositivo Asciugatrice si è spento
+[09:55] Il dispositivo Lavatrice si è spento
+[12:00] Il dispositivo Impianto fotovoltaico si è spento
+[13:00] L'orario attuale è 13:00
+>> show
+[13:00] L'orario attuale è 13:00
+
+Valori attuali del sistema:
+Produzione energetica: 6 kWh
+Consumo energetico: -10.3983 kWh
+
+Nello specifico:
+
+ID: 13531106073472694221
+Nome: Impianto fotovoltaico
+Stato: Spento
+Potenza Prodotta: 1.5 kW
+Energia Giornaliera Prodotta: 6 kWh
+
+ID: 2203334275787503963
+Nome: Pompa di calore
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: -1 kWh
+
+ID: 9603990876938069059
+Nome: Scaldabagno
+Stato: Spento
+Potenza Consumata: -1 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 13795398373824917895
+Nome: Frigorifero
+Stato: Acceso
+Potenza Consumata: -0.4 kW
+Energia Giornaliera Consumata: -5.2 kWh
+
+ID: 17650418933910698347
+Nome: Lavatrice
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: -3.66667 kWh
+
+ID: 14989406340407800936
+Nome: Lavastoviglie
+Stato: Spento
+Potenza Consumata: -1.5 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 8581785451783129515
+Nome: Tapparelle elettriche
+Stato: Spento
+Potenza Consumata: -0.3 kW
+Energia Giornaliera Consumata: -0.005 kWh
+
+ID: 14922336944404843892
+Nome: Forno a microonde
+Stato: Spento
+Potenza Consumata: -0.8 kW
+Energia Giornaliera Consumata: -0.0266667 kWh
+
+ID: 12908450997280079023
+Nome: Asciugatrice
+Stato: Spento
+Potenza Consumata: -0.5 kW
+Energia Giornaliera Consumata: -0.5 kWh
+
+ID: 5698433661524228528
+Nome: Televisore
+Stato: Spento
+Potenza Consumata: -0.2 kW
+Energia Giornaliera Consumata: 0 kWh
+
+>> set "Forno a microonde" on
+[13:00] L'orario attuale è 13:00
+[13:00] Il dispositivo Forno a microonde si è acceso
+>> set Televisore on
+[13:00] L'orario attuale è 13:00
+[13:00] Il dispositivo Televisore si è acceso
+>> set time 14:00
+[13:00] L'orario attuale è 13:00
+[13:02] Il dispositivo Forno a microonde si è spento
+[14:00] Il dispositivo Televisore si è spento
+[14:00] L'orario attuale è 14:00
+>> set "Tapparelle elettriche" on
+[14:00] L'orario attuale è 14:00
+[14:00] Il dispositivo Tapparelle elettriche si è acceso
+>> set "Pompa di calore" 17:00 19:00
+[14:00] L'orario attuale è 14:00
+[14:00] Impostato un timer per il dispositivo Pompa di calore dalle 17:00 alle 19:00
+>> set Lavastoviglie 18:00
+[14:00] L'orario attuale è 14:00
+[14:00] Impostato un timer per il dispositivo Lavastoviglie dalle 18:00
+>> set time 19:00
+[14:00] L'orario attuale è 14:00
+[14:01] Il dispositivo Tapparelle elettriche si è spento
+[17:00] Il dispositivo Pompa di calore si è acceso
+[18:00] Il dispositivo Lavastoviglie si è acceso
+[18:00] Pompa di calore è stato spento per rispettare il limite di potenza
+[19:00] L'orario attuale è 19:00
+>> set "Forno a microonde" on
+[19:00] L'orario attuale è 19:00
+[19:00] Il dispositivo Forno a microonde si è acceso
+>> show
+[19:00] L'orario attuale è 19:00
+
+Valori attuali del sistema:
+Produzione energetica: 6 kWh
+Consumo energetico: -15.4983 kWh
+
+Nello specifico:
+
+ID: 13531106073472694221
+Nome: Impianto fotovoltaico
+Stato: Spento
+Potenza Prodotta: 1.5 kW
+Energia Giornaliera Prodotta: 6 kWh
+
+ID: 2203334275787503963
+Nome: Pompa di calore
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: -2 kWh
+
+ID: 9603990876938069059
+Nome: Scaldabagno
+Stato: Spento
+Potenza Consumata: -1 kW
+Energia Giornaliera Consumata: 0 kWh
+
+ID: 13795398373824917895
+Nome: Frigorifero
+Stato: Acceso
+Potenza Consumata: -0.4 kW
+Energia Giornaliera Consumata: -7.6 kWh
+
+ID: 17650418933910698347
+Nome: Lavatrice
+Stato: Spento
+Potenza Consumata: -2 kW
+Energia Giornaliera Consumata: -3.66667 kWh
+
+ID: 14989406340407800936
+Nome: Lavastoviglie
+Stato: Acceso
+Potenza Consumata: -1.5 kW
+Energia Giornaliera Consumata: -1.5 kWh
+
+ID: 8581785451783129515
+Nome: Tapparelle elettriche
+Stato: Spento
+Potenza Consumata: -0.3 kW
+Energia Giornaliera Consumata: -0.005 kWh
+
+ID: 14922336944404843892
+Nome: Forno a microonde
+Stato: Acceso
+Potenza Consumata: -0.8 kW
+Energia Giornaliera Consumata: -0.0266667 kWh
+
+ID: 12908450997280079023
+Nome: Asciugatrice
+Stato: Spento
+Potenza Consumata: -0.5 kW
+Energia Giornaliera Consumata: -0.5 kWh
+
+ID: 5698433661524228528
+Nome: Televisore
+Stato: Spento
+Potenza Consumata: -0.2 kW
+Energia Giornaliera Consumata: -0.2 kWh
+
+>> set Lavastoviglie off
+[19:00] L'orario attuale è 19:00
+[19:00] Il dispositivo Lavastoviglie si è spento
+>> set time 23:59
+[19:00] L'orario attuale è 19:00
+[19:02] Il dispositivo Forno a microonde si è spento
+[23:59] L'orario attuale è 23:59
